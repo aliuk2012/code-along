@@ -3,17 +3,28 @@
   <head>
     <meta charset="utf-8">
     <title>code-along</title>
+
+    <script src="codemirror/codemirror-compressed.js"></script>
+    <link rel="stylesheet" href="codemirror/codemirror.css">
+
     <style media="screen">
       body {margin:0;height: 100vh; display: flex}
-      iframe, textarea {margin:0;display: block; width: 100%; flex: 1}
+      iframe, #code {margin:0;display: block; width: 100%; flex: 1}
       textarea {font-family: monospace; font-size: 1.25em; border:none}
+      .CodeMirror {height: 100%}
     </style>
   </head>
   <body>
     <iframe src="about:blank"></iframe>
-    <textarea name="name">document.body.style.background = '#08f'</textarea>
+    <div id="code"></div>
+
 
     <script type="text/javascript">
+      var code = CodeMirror(document.getElementById('code'), {
+        value: "document.body.style.background = '#08f'",
+        mode:  "javascript"
+      })
+
       var textarea = document.querySelector('textarea')
       var iframe   = document.querySelector('iframe')
 
@@ -28,7 +39,7 @@
 
             var blob = new Blob([text
               .split('{{INJECT}}')
-              .join(textarea.value)], {type: 'text/html'})
+              .join(code.getValue())], {type: 'text/html'})
 
             var url = URL.createObjectURL(blob)
             iframe.src = url
@@ -37,7 +48,7 @@
       }
 
       load()
-      textarea.onkeyup = load
+      code.on('change', load)
 
       var steps = []
       //
