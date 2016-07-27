@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>convert</title>
+  </head>
+  <body>
+    <textarea name="source" rows="20" cols="40" id="source">
+import {arrow, background} from 'draw'
+
+
+arrow(f => {
+  console.log(f)
+})
+
+const x = () => 42;
+
+document.body.style.color = x()
+
+
+
+</textarea>
+    <textarea name="output" rows="20" cols="40" id=output></textarea>
+
+    <script type="text/javascript" src="lib/rollup.browser.js"></script>
+
+    <script type="text/javascript" src="lib/buble.deps.js"></script>
+
+
+    <script type="text/javascript">
+
+    function generate(){
+
+    var s = window.performance.now()
+    window.rollup.rollup({
+      entry: '__main__',
+      plugins:[
+
+        {
+          name: 'ben',
+          resolveId: function(importer, importee) {
+            return importer
+          },
+          load: function(id) {
+            if(id == '__main__') {
+              return source.value
+            }
+            // console.log(id)
+            return Promise.resolve("export function arrow() {console.log('foo')}")
+          }
+        },
+        {
+          name: 'buble',
+          transformBundle: function(d){
+            return buble.transform(d).code
+          }
+        }
+      ]
+    })
+    .then(function(bundle){
+
+      output.value =
+        bundle.generate({
+          format: 'iife'
+        }).code
+
+      console.log("build time: %dms", window.performance.now() - s)
+    })
+    .catch(function(e){
+      console.error(e)
+
+    })
+
+  }
+
+  generate()
+
+  source.onkeyup = generate
+
+    </script>
+  </body>
+</html>
