@@ -7,11 +7,22 @@
     <script src="codemirror/codemirror-compressed.js"></script>
     <link rel="stylesheet" href="codemirror/codemirror.css">
 
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <script type="text/javascript">
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('font-sw.js')
+      .catch(function(e){console.log(e)})
+    }
+    </script>
+
     <style media="screen">
       body {margin:0;height: 100vh; display: flex}
       iframe, #code {margin:0;display: block; width: 100%; flex: 1}
       textarea {font-family: monospace; font-size: 1.25em; border:none}
-      .CodeMirror {height: 100%}
+      .CodeMirror {
+        height: 100%;
+        font-family: 'Inconsolata', monospace;
+      }
     </style>
   </head>
   <body>
