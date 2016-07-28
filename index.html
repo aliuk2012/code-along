@@ -19,9 +19,42 @@
       body {margin:0;height: 100vh; display: flex}
       iframe, #code {margin:0;display: block; width: 100%; flex: 1}
       textarea {font-family: monospace; font-size: 1.25em; border:none}
+      iframe {border: none;}
+      #code {
+        box-shadow: rgba(0,0,0,.2) 0 0 15px;
+      }
+
+      #code {
+        padding: 1em;
+        position: relative;
+      }
+
+      /* this should be a toggle element */
+      #code:before {
+        content:'‹';
+        line-height: 0.8em;
+        font-family: 'Inconsolata', monospace;
+        font-size: 3em;
+        position: absolute;
+        left:-1.25em;
+        background: #fff;
+        border-radius: 100%;
+        width: 1em;
+        height:1em;
+        text-align: center;
+        box-shadow: rgba(0,0,0,.2) 0 0 15px;
+        transform: rotate(180deg);
+        transition: .2s transform;
+        cursor: pointer;
+      }
       .CodeMirror {
         height: 100%;
         font-family: 'Inconsolata', monospace;
+      }
+      .CodeMirror .error-widget {
+        margin-top: -1.05em;
+        width: .5em;
+        background: rgba(255, 0, 0, .5);
       }
     </style>
   </head>
