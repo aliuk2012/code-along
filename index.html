@@ -30,9 +30,8 @@
       }
 
       /* this should be a toggle element */
-      #code:before {
-        content:'‹';
-        line-height: 0.8em;
+      #toggle {
+        border: 0;
         font-family: 'Inconsolata', monospace;
         font-size: 3em;
         position: absolute;
@@ -41,11 +40,20 @@
         border-radius: 100%;
         width: 1em;
         height:1em;
-        text-align: center;
         box-shadow: rgba(0,0,0,.2) 0 0 15px;
-        transform: rotate(180deg);
-        transition: .2s transform;
         cursor: pointer;
+      }
+      #toggle img {
+        width: 1em;
+        height: 1em;
+        position: absolute;
+        left: 0;
+        top: 0;
+        transition: .2s transform;
+        transform: rotate(90deg);
+      }
+      #toggle.on img {
+        transform: rotate(-90deg);
       }
       .CodeMirror {
         height: 100%;
@@ -60,7 +68,11 @@
   </head>
   <body>
     <iframe src="about:blank"></iframe>
-    <div id="code"></div>
+    <div id="code">
+      <button id="toggle">
+        <img src="chevron.svg" />
+      </button>
+    </div>
 
 
     <script type="text/javascript">
