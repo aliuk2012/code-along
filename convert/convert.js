@@ -27,7 +27,7 @@ function convert (source) {
         },
         load: function(id) {
           if(id == '__main__') return source
-          return modules[id] || Promise.reject("")
+          return modules[id] || Promise.reject("not provided")
         }
       },
       {
