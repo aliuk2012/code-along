@@ -20,10 +20,12 @@ document.body.style.color = x()
 
 
 </textarea>
+<div id="err"></div>
     <textarea name="output" rows="20" cols="40" id=output></textarea>
 
     <script type="text/javascript" src="convert/lib/rollup.browser.js"></script>
     <script type="text/javascript" src="convert/lib/buble.deps.js"></script>
+    <script type="text/javascript" src="convert/lib/loop-protect.js"></script>
     <script type="text/javascript" src="convert/lib/es6-promise.js"></script>
     <script type="text/javascript" src="convert/lib/fetch.js"></script>
 
@@ -35,6 +37,18 @@ document.body.style.color = x()
     function generate(){
       convert(source.value)
         .then(js => output.value = js )
+
+        .then(
+          _ => {
+            err.innerText = ''
+            source.style.boxShadow = ''
+          },
+          e => {
+            err.innerText = e
+            source.style.boxShadow = 'inset rgba(255,0,0,0.5) 0 0 10px'
+          }
+        )
+
     }
 
     generate()
