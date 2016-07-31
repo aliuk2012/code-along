@@ -7,7 +7,10 @@
 #code {background: rgba(0,0,255,0.4)}*/
 
 /* styling */
-#code {box-shadow: rgba(0,0,0,.2) 0 0 15px;}
+#code {
+  background: #fff;
+  box-shadow: rgba(0,0,0,.2) 0 0 15px;
+}
 
 /* this should be a toggle element */
 #toggle {
@@ -22,7 +25,7 @@
   box-shadow: rgba(0,0,0,.2) 0 0 15px;
   cursor: pointer;
   transition: .5s, box-shadow .1s;
-  left: 50%;
+  left: 60%;
   top:0;
   margin: .25em;
 }
@@ -43,7 +46,8 @@
 }
 
 .CodeMirror {
-  height: 100%;
+  margin: 1em;
+  height: 80%;
   font-family: 'Inconsolata', monospace;
 }
 .CodeMirror .error-widget {
@@ -59,7 +63,7 @@
   position: absolute;
   top:0;
   bottom:0;
-  right:50%;
+  right:40%;
   left:0;
 
   transition: .5s;
@@ -70,7 +74,7 @@ iframe {
   top:0;
   bottom:0;
   right:0;
-  left:50%;
+  left:60%;
   border: none;
   height: 100%;
   width: 50%;

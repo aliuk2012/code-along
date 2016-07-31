@@ -39,7 +39,9 @@
 
       var code = CodeMirror(document.getElementById('code'), {
         value: "document.body.style.background = '#08f'",
-        mode:  "javascript"
+        mode:  "javascript",
+        lineWrapping: true,
+        // readOnly: true
       })
 
       var textarea = document.querySelector('textarea')
