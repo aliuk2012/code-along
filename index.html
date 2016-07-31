@@ -28,6 +28,15 @@
     </button>
 
 
+    <script src="convert/lib/rollup.browser.js"></script>
+    <script src="convert/lib/buble.deps.js"></script>
+    <script src="convert/lib/loop-protect.js"></script>
+    <script src="convert/lib/es6-promise.js"></script>
+    <script src="convert/lib/fetch.js"></script>
+
+    <script src="convert/convert.js"></script>
+
+
     <script type="text/javascript">
       var htm = document.getElementsByTagName('html')[0]
       toggle.onclick = function(e){
@@ -48,23 +57,36 @@
 
       var textarea = document.querySelector('textarea')
       var iframe   = document.querySelector('iframe')
+      var error_el = document.getElementById('error')
 
       var template = fetch('template.txt')
                        .then(r => r.text())
 
       function load(){
-        template
-          .then(text => {
+        convert(code.getValue())
+          .then(function(code){
+            template
+              .then(text => {
 
-            URL.revokeObjectURL(iframe.src)
+                URL.revokeObjectURL(iframe.src)
 
-            var blob = new Blob([text
-              .split('{{INJECT}}')
-              .join(code.getValue())], {type: 'text/html'})
+                var blob = new Blob([text
+                  .split('{{INJECT}}')
+                  .join(code)], {type: 'text/html'})
 
-            var url = URL.createObjectURL(blob)
-            iframe.src = url
+                var url = URL.createObjectURL(blob)
+                iframe.src = url
+              })
           })
+        .then(function(ok){
+          error_el.style.display = 'none'
+        }, function(err){
+          error_el.style.display = 'block'
+          error_el.innerText = err
+        })
+
+
+
 
       }
 
