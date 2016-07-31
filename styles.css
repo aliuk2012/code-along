@@ -7,6 +7,11 @@
 #code {background: rgba(0,0,255,0.4)}*/
 
 /* styling */
+
+body {
+  font-family: 'Inconsolata', monospace;
+}
+
 #code {
   background: #fff;
   box-shadow: rgba(0,0,0,.2) 0 0 15px;
@@ -15,7 +20,6 @@
 /* this should be a toggle element */
 #toggle {
   border: 0;
-  font-family: 'Inconsolata', monospace;
   font-size: 3em;
   position: absolute;
   background: #fff;
@@ -56,7 +60,15 @@
   background: rgba(255, 0, 0, .5);
 }
 
-
+#error {
+  background: rgba(255,0,0, .8);
+  color: #fff;
+  padding: .5em;
+  position: absolute;
+  bottom:0;
+  z-index: 100;
+  max-width: 80%;
+}
 
 /* positioning */
 #code {
