@@ -16,18 +16,16 @@
     </script>
 
     <style media="screen">
-      body {margin:0;height: 100vh; display: flex}
-      iframe, #code {margin:0;display: block; width: 100%; flex: 1}
-      textarea {font-family: monospace; font-size: 1.25em; border:none}
-      iframe {border: none;}
-      #code {
-        box-shadow: rgba(0,0,0,.2) 0 0 15px;
+      * {
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important
       }
 
-      #code {
-        padding: 1em;
-        position: relative;
-      }
+      /* debug */
+      /*iframe {background: rgba(0,255,0,0.4)}
+      #code {background: rgba(0,0,255,0.4)}*/
+
+      /* styling */
+      #code {box-shadow: rgba(0,0,0,.2) 0 0 15px;}
 
       /* this should be a toggle element */
       #toggle {
@@ -35,26 +33,33 @@
         font-family: 'Inconsolata', monospace;
         font-size: 3em;
         position: absolute;
-        left:-1.25em;
         background: #fff;
         border-radius: 100%;
         width: 1em;
         height:1em;
         box-shadow: rgba(0,0,0,.2) 0 0 15px;
         cursor: pointer;
+        transition: .5s, box-shadow .1s;
+        left: 50%;
+        top:0;
+        margin: .25em;
       }
+
+      #toggle:focus {
+        outline: none;
+        box-shadow: aquamarine 0 0 10px;
+      }
+
       #toggle img {
         width: 1em;
         height: 1em;
         position: absolute;
         left: 0;
         top: 0;
-        transition: .2s transform;
+        transition: .5s transform;
         transform: rotate(90deg);
       }
-      #toggle.on img {
-        transform: rotate(-90deg);
-      }
+
       .CodeMirror {
         height: 100%;
         font-family: 'Inconsolata', monospace;
@@ -64,18 +69,129 @@
         width: .5em;
         background: rgba(255, 0, 0, .5);
       }
+
+
+
+      /* positioning */
+      #code {
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:50%;
+        left:0;
+
+        transition: .5s;
+      }
+
+      iframe {
+        position: absolute;
+        top:0;
+        bottom:0;
+        right:0;
+        left:50%;
+        border: none;
+        height: 100%;
+        width: 50%;
+
+        transition: .5s;
+      }
+
+
+
+
+      /* full screen frame */
+
+      .fill #code{
+        transform: translateX(-100%);
+      }
+
+      .fill iframe {
+        left: 0;
+        width: 100%;
+      }
+
+      .fill #toggle {
+        left: 0;
+      }
+
+      .fill #toggle img {
+        transform: rotate(-90deg);
+      }
+
+
+
+      /* vertical stacked styling */
+
+      @media all and (orientation: portrait) {
+
+          /* vertical */
+          #code{
+            top: 50%;
+            right: 0;
+            min-height: 50%;
+          }
+
+          iframe{
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+          }
+
+          #toggle{
+            left:0;
+            top:50%;
+            margin-top: -1.5em;
+            transform: rotate(-90deg);
+          }
+
+          .fill #code{
+            transform: translateY(100%);
+          }
+
+          .fill iframe{
+            height: 100%;
+          }
+
+          .fill #toggle{
+            top: 100%;
+          }
+
+
+    }
+
+
+/*
+      .x body {
+        flex-direction: column
+      }
+      .x #toggle {
+        left: .5em;
+        bottom: 3.75em;
+        transform: rotate(90deg);
+      }*/
+
     </style>
   </head>
   <body>
     <iframe src="about:blank"></iframe>
-    <div id="code">
-      <button id="toggle">
-        <img src="chevron.svg" />
-      </button>
-    </div>
+    <div id="code"></div>
+    <button id="toggle">
+      <img src="chevron.svg" />
+    </button>
 
 
     <script type="text/javascript">
+      var htm = document.getElementsByTagName('html')[0]
+      toggle.onclick = function(e){
+        e.preventDefault()
+        htm.classList.toggle('fill')
+      }
+      // setInterval(function(){
+      //   htm.classList.toggle('fill')
+      // }, 1000)
+
+
       var code = CodeMirror(document.getElementById('code'), {
         value: "document.body.style.background = '#08f'",
         mode:  "javascript"
