@@ -22,60 +22,24 @@ document.body.style.color = x()
 </textarea>
     <textarea name="output" rows="20" cols="40" id=output></textarea>
 
-    <script type="text/javascript" src="lib/rollup.browser.js"></script>
+    <script type="text/javascript" src="convert/lib/rollup.browser.js"></script>
+    <script type="text/javascript" src="convert/lib/buble.deps.js"></script>
+    <script type="text/javascript" src="convert/lib/es6-promise.js"></script>
+    <script type="text/javascript" src="convert/lib/fetch.js"></script>
 
-    <script type="text/javascript" src="lib/buble.deps.js"></script>
+    <script type="text/javascript" src="convert/convert.js"></script>
 
 
     <script type="text/javascript">
 
     function generate(){
+      convert(source.value)
+        .then(js => output.value = js )
+    }
 
-    var s = window.performance.now()
-    window.rollup.rollup({
-      entry: '__main__',
-      plugins:[
+    generate()
 
-        {
-          name: 'ben',
-          resolveId: function(importer, importee) {
-            return importer
-          },
-          load: function(id) {
-            if(id == '__main__') {
-              return source.value
-            }
-            // console.log(id)
-            return Promise.resolve("export function arrow() {console.log('foo')}")
-          }
-        },
-        {
-          name: 'buble',
-          transformBundle: function(d){
-            return buble.transform(d).code
-          }
-        }
-      ]
-    })
-    .then(function(bundle){
-
-      output.value =
-        bundle.generate({
-          format: 'iife'
-        }).code
-
-      console.log("build time: %dms", window.performance.now() - s)
-    })
-    .catch(function(e){
-      console.error(e)
-
-    })
-
-  }
-
-  generate()
-
-  source.onkeyup = generate
+    source.onkeyup = generate
 
     </script>
   </body>
