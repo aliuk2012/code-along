@@ -4,30 +4,28 @@
     <meta charset="utf-8">
     <title>code-along</title>
 
-    <script src="codemirror/codemirror-compressed.js"></script>
-    <link rel="stylesheet" href="codemirror/codemirror.css">
-
     <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
-    <script type="text/javascript">
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('font-sw.js')
-      .catch(function(e){console.log(e)})
-    }
-    </script>
+    <link href="codemirror/codemirror.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="styles.css" media="screen" charset="utf-8">
+    <script type="text/javascript">
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('font-sw.js')
+    </script>
 
   </head>
   <body>
+
     <iframe src="about:blank"></iframe>
+
     <div id="code">
       <div id="error" style="display:none"></div>
     </div>
+
     <button id="toggle">
       <img src="chevron.svg" />
     </button>
 
-
+    <script src="codemirror/codemirror-compressed.js"></script>
     <script src="convert/lib/rollup.browser.js"></script>
     <script src="convert/lib/buble.deps.js"></script>
     <script src="convert/lib/loop-protect.js"></script>
@@ -36,59 +34,7 @@
 
     <script src="convert/convert.js"></script>
 
+    <script src="main.js"></script>
 
-    <script type="text/javascript">
-      var htm = document.getElementsByTagName('html')[0]
-      toggle.onclick = function(e){
-        e.preventDefault()
-        htm.classList.toggle('fill')
-      }
-
-      var code = CodeMirror(document.getElementById('code'), {
-        value: "document.body.style.background = '#08f'",
-        mode:  "javascript",
-        lineWrapping: true,
-        // readOnly: true
-      })
-
-      var textarea = document.querySelector('textarea')
-      var iframe   = document.querySelector('iframe')
-      var error_el = document.getElementById('error')
-
-      var template = fetch('template.txt')
-                       .then(function(r){return r.text()})
-
-      function load(){
-        convert(code.getValue())
-          .then(function(code){
-            template
-              .then(function(text) {
-
-                URL.revokeObjectURL(iframe.src)
-
-                var blob = new Blob([text
-                  .split('{{INJECT}}')
-                  .join(code)], {type: 'text/html'})
-
-                var url = URL.createObjectURL(blob)
-                iframe.src = url
-              })
-          })
-        .then(function(ok){
-          error_el.style.display = 'none'
-        }, function(err){
-          error_el.style.display = 'block'
-          error_el.innerText = err
-        })
-
-
-
-
-      }
-
-      load()
-      code.on('change', load)
-
-    </script>
   </body>
 </html>
