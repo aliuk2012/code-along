@@ -60,13 +60,13 @@
       var error_el = document.getElementById('error')
 
       var template = fetch('template.txt')
-                       .then(r => r.text())
+                       .then(function(r){return r.text()})
 
       function load(){
         convert(code.getValue())
           .then(function(code){
             template
-              .then(text => {
+              .then(function(text) {
 
                 URL.revokeObjectURL(iframe.src)
 
