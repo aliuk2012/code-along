@@ -1,0 +1,29 @@
+{
+  "name": "code-along",
+  "version": "1.0.0",
+  "description": "A tool for interactive \"code-together\" javascript workshops",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/benfoxall/code-along.git"
+  },
+  "author": "Ben Foxall @benjaminbenben",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/benfoxall/code-along/issues"
+  },
+  "homepage": "https://github.com/benfoxall/code-along#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "ioredis": "^2.2.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-uglify": "^1.5.4"
+  }
+}
