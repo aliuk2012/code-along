@@ -120,7 +120,10 @@ iframe {
 
 /* vertical stacked styling */
 
+/*
 @media all and (orientation: portrait) {
+*/
+@media all and (max-width: 600px) {
 
     /* vertical */
     #code{
