@@ -54,5 +54,27 @@ app.get('/pusher/config', (req, res) => {
 })
 
 
+app.get('/content/:key', (req, res) => {
+  console.log(req.params.key)
+  redis.get('content:' + req.params.key)
+    .then(function(d){
+      res.send(d || '// ' + req.params.key)
+    })
+})
+
+app.put('/content/:key', bodyParser.json(), (req, res) => {
+  console.log(req.body)
+
+  if(req.body.content) {
+    redis.set('content:' + req.params.key, req.body.content)
+    .then(function(){
+      console.log("saved")
+
+      pusher.trigger('presence-' + req.params.key, 'content', req.body.content, req.body.socket_id)
+
+    })
+  }
+  res.send('ok')
+})
 
 app.listen(process.env.PORT || 5000)

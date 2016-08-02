@@ -22,7 +22,7 @@
     <div id="code">
       <div id="error" style="display:none"></div>
 
-      <div id="connection-state">12</div>
+      <div id="connection-state" style="display:none">-</div>
     </div>
 
     <button id="toggle">
@@ -47,13 +47,7 @@
     <script src="main.js"></script>
 
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
-    <script type="text/javascript">
-      fetch('/pusher/config')
-        .then(function(r){return r.json()})
-        .then(function(config) {
-          var pusher = new Pusher(config.key, config.options)
-        })
-    </script>
+    <script src="connect.js"></script>
 
   </body>
 </html>
