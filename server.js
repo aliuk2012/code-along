@@ -66,7 +66,7 @@ app.put('/content/:key', bodyParser.json(), (req, res) => {
   console.log(req.body)
 
   if(req.body.content) {
-    redis.set('content:' + req.params.key, req.body.content)
+    redis.setex('content:' + req.params.key, 60*60*24, req.body.content)
     .then(function(){
       console.log("saved")
 
