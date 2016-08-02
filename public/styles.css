@@ -19,6 +19,7 @@ body {
 
 /* this should be a toggle element */
 button {
+  z-index: 10;
   border: 0;
   font-size: 3em;
   position: absolute;
@@ -60,6 +61,41 @@ button span {
 
 #toggle {
   transform: rotate(90deg);
+}
+/*
+#edit {
+  bottom:0;
+  left:100%
+}*/
+
+#connection-state{
+  position: absolute;
+  font-size: 1em;
+  z-index: 1000;
+  bottom:0;
+  right:0;
+  padding:.5em;
+  background-image: url(icon-check.svg);
+  background-repeat:no-repeat;
+  background-position: right;
+  background-size: 1.5em;
+  padding-right: 1.5em;
+  color: #000000;
+}
+
+#connection-state.changed {
+  color: #bf2020;
+  background-image: url(icon-reload.svg);
+  background-color: #eee;
+  cursor: pointer;
+}
+#connection-state.changed:hover {
+  background-color: #ccc;
+}
+
+#connection-state img {
+  height: 1em;
+  vertical-align: middle;
 }
 
 .CodeMirror {
