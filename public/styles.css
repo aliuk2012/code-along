@@ -18,7 +18,7 @@ body {
 }
 
 /* this should be a toggle element */
-#toggle {
+button {
   border: 0;
   font-size: 3em;
   position: absolute;
@@ -29,23 +29,36 @@ body {
   box-shadow: rgba(0,0,0,.2) 0 0 15px;
   cursor: pointer;
   transition: .5s, box-shadow .1s;
-  left: 60%;
-  top:0;
   margin: .25em;
 }
 
-#toggle:focus {
+button:focus {
   outline: none;
   box-shadow: aquamarine 0 0 10px;
 }
 
-#toggle img {
+button img {
   width: 1em;
   height: 1em;
   position: absolute;
   left: 0;
   top: 0;
   transition: .5s transform;
+}
+
+button span {
+  font-size: .3em;
+  position: absolute;
+  left: -5.5em;
+  width: 5em;
+  line-height: 1.5em;
+  margin-top: -0.75em;
+  text-align: right;
+  font-weight: 800;
+  color: rgba(0,0,0,0.7)
+}
+
+#toggle {
   transform: rotate(90deg);
 }
 
@@ -77,9 +90,20 @@ body {
   bottom:0;
   right:40%;
   left:0;
-
   transition: .5s;
 }
+
+#toggle {
+  left: 60%;
+  top:0;
+}
+
+#live {
+  left: 100%;
+  margin-left: -1.25em;
+  bottom:0;
+}
+
 
 iframe {
   position: absolute;
@@ -113,7 +137,7 @@ iframe {
 }
 
 .fill #toggle img {
-  transform: rotate(-90deg);
+  transform: rotate(-180deg);
 }
 
 
@@ -142,8 +166,13 @@ iframe {
     #toggle{
       left:0;
       top:50%;
-      margin-top: -1.5em;
-      transform: rotate(-90deg);
+      margin-top: -1.25em;
+      transform: none;
+    }
+
+    #live{
+      bottom:100%;
+      margin-bottom: -1.25em;
     }
 
     .fill #code{

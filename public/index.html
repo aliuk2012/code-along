@@ -24,7 +24,11 @@
     </div>
 
     <button id="toggle">
-      <img src="chevron.svg" />
+      <img src="icon-chevron.svg" />
+    </button>
+
+    <button id="live">
+      <img src="icon-check.svg" />
     </button>
 
     <script src="codemirror/codemirror-compressed.js"></script>
@@ -37,6 +41,15 @@
     <script src="convert/convert.js"></script>
 
     <script src="main.js"></script>
+
+    <script src="//js.pusher.com/3.1/pusher.min.js"></script>
+    <script type="text/javascript">
+      fetch('/pusher/config')
+        .then(function(r){return r.json()})
+        .then(function(config) {
+          var pusher = new Pusher(config.key, config.options)
+        })
+    </script>
 
   </body>
 </html>
