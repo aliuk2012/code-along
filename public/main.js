@@ -44,4 +44,11 @@ function load(){
 }
 
 load()
-code.on('change', load)
+code.on('change', debounce(load, 200))
+
+function debounce(fn, millis, timer){
+  return function(){
+    clearTimeout(timer)
+    timer = setTimeout(fn,millis,arguments)
+  }
+}
