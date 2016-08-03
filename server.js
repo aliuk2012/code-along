@@ -60,13 +60,17 @@ app.get('/content', (req, res) => {
     })
 })
 
+var readOnly = false
+
 app.put('/content', bodyParser.json(), (req, res) => {
+
+  if(!req.session.auth) return res.sendStatus(401)
 
   if(req.body.value) {
     redis.setex('content', 60*60*24, req.body.value)
     .then(function(){
       pusher.trigger('codealong', 'update', {
-        readOnly: false,
+        readOnly: readOnly,
         body: req.body.value
       })
     })
@@ -74,6 +78,31 @@ app.put('/content', bodyParser.json(), (req, res) => {
 
   res.send('ok')
 
+})
+
+app.put('/readonly/on', bodyParser.json(), (req, res) => {
+  if(!req.session.auth) return res.sendStatus(401)
+  readOnly = true
+  pusher.trigger('codealong', 'update', {
+    readOnly: readOnly
+  })
+  res.send('ok')
+})
+app.put('/readonly/off', bodyParser.json(), (req, res) => {
+  if(!req.session.auth) return res.sendStatus(401)
+  readOnly = false
+  pusher.trigger('codealong', 'update', {
+    readOnly: readOnly
+  })
+  res.send('ok')
+})
+
+app.get('/auth', (req, res) => res.send(req.session.auth?'YES':'NO'))
+
+app.post('/auth', (req, res) => {
+  var authed = req.body.password == process.env.PASSWORD
+  req.session.auth = authed
+  res.sendStatus(authed? 200 : 401)
 })
 
 

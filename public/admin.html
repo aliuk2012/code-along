@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+
+    <div style="float:right">
+      <a href="javascript:readOnly(true)" class="b" onclick="">MAKE READ ONLY</a>
+      <a href="javascript:readOnly(false)" class="b" onclick="">MAKE EDITABLE</a>
+    </div>
+
+    <h2>Auth state: <span id="state"></span></h2>
+    <form action="/auth" method="post">
+
+      <script type="text/javascript">
+        fetch('/auth',  { credentials: 'same-origin' })
+          .then(res => res.text())
+          .then(text => state.innerText = text)
+      </script>
+
+      <input type="password" name="password" value="">
+      <input type="submit" name="name" value="save">
+    </form>
+
+    <!-- <label style="float:right;">
+      readOnly:
+      <input id="editable" type="checkbox" name="editable" value="">
+    </label> -->
+
+<h3>My favourite colour</h3>
+<pre><code>document.body.style.background = 'aquamarine'</code></pre>
+<button class="send">💥</button>
+
+
+<h3>An editor</h3>
+<pre><code>var source = document.createElement('textarea')
+var target = document.createElement('iframe')
+
+document.body.appendChild(source)
+document.body.appendChild(target)
+
+source.onkeyup = function(){
+  target.src = 'data:text/html;charset=utf-8,' +
+    '%3Cbody%3E%3Cscript%3E' +
+    encodeURI(source.value)
+    '%3C/script%3E'
+}
+</code></pre>
+<button class="send">💥</button>
+
+
+<h3>Slow Disco disco</h3>
+<pre><code>import {circle, clear} from 'draw'
+
+circle(0.2)
+
+document.body.style.transition = '.2s'
+
+setInterval(function(){
+  document.body.style.background =
+    `hsl(${Math.random()*360}, 100%, 50%)`
+}, 700)</code></pre>
+<button class="send">💥</button>
+
+<style media="screen">
+  pre {
+    border-left: 4px solid #f08;
+    padding: 0.5em;
+    background: #eee;
+  }
+
+  body {
+    margin: 2em;
+    max-width: 40em;
+    position: relative;
+  }
+
+  .send {
+    right:.25em;
+    margin-top:-1.5em;
+    overflow: hidden;
+  }
+  #editable{
+    font-size: 4em;
+  }
+  .b {
+    border: 1px solid #000;
+    margin:0.25em;
+    cursor: pointer;
+    padding:.2em;
+  }
+  .b:hover{
+    background: #ccc;
+  }
+</style>
+
+<script type="text/javascript">
+
+  function readOnly(value) {
+    console.log(value)
+    fetch(value ? '/readonly/on' : '/readonly/off', {
+      credentials: 'same-origin',
+      method: 'PUT',
+      body: 'yup'
+    })
+  }
+
+  [].forEach.call(document.querySelectorAll('.send'),function(element){
+    element.addEventListener('click', function(){
+      console.log("click", this)
+
+      var value = this.previousElementSibling.firstChild.firstChild.wholeText
+
+
+      fetch('/content', {
+        credentials: 'same-origin',
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          value: value
+        })
+      })
+    })
+  })
+</script>
+
+  </body>
+</html>

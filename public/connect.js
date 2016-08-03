@@ -42,13 +42,13 @@ if(document.location.hash != '#master') {
         console.log("putting")
 
         fetch('/content', {
+          credentials: 'same-origin',
           method: 'PUT',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            // socket_id: socket_id,
             value: code.getValue()
           })
         })
