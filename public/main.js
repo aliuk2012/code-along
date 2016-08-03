@@ -5,7 +5,7 @@ toggle.onclick = function(e){
 }
 
 var code = CodeMirror(document.getElementById('code'), {
-  value: "document.body.style.background = '#08f'",
+  value: "",
   mode:  "javascript",
   lineWrapping: true,
   // readOnly: true

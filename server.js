@@ -53,28 +53,28 @@ app.get('/pusher/config', (req, res) => {
   })
 })
 
-
-app.get('/content/:key', (req, res) => {
-  console.log(req.params.key)
-  redis.get('content:' + req.params.key)
-    .then(function(d){
-      res.send(d || '// ' + req.params.key)
+app.get('/content', (req, res) => {
+  redis.get('content')
+    .then(function(d, e){
+      res.send(d || "document.body.style.background = '#fc0'" )
     })
 })
 
-app.put('/content/:key', bodyParser.json(), (req, res) => {
-  console.log(req.body)
+app.put('/content', bodyParser.json(), (req, res) => {
 
-  if(req.body.content) {
-    redis.setex('content:' + req.params.key, 60*60*24, req.body.content)
+  if(req.body.value) {
+    redis.setex('content', 60*60*24, req.body.value)
     .then(function(){
-      console.log("saved")
-
-      pusher.trigger('presence-' + req.params.key, 'content', req.body.content, req.body.socket_id)
-
+      pusher.trigger('codealong', 'update', {
+        readOnly: false,
+        body: req.body.value
+      })
     })
   }
+
   res.send('ok')
+
 })
+
 
 app.listen(process.env.PORT || 5000)
