@@ -41,6 +41,8 @@
 
 * part 2 - across all the things
 
+
+
 ```
 for(var i = 0; i < 100; i--){
   console.log("whoop whoop")

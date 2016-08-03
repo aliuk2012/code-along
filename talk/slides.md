@@ -1,13 +1,17 @@
 # [fit] HELLO!
-## [fit] I'm @benjaminbenben!
+## [fit] I'm [@benjaminbenben](https://twitter.com/benjaminbenben)!
 
 ---
 
-# [fit] I work at @Pusher
+# [fit] I work at [@Pusher](https://twitter.com/pusher)
+
+![inline](images/pusher_dark.png)
 
 ---
 
-# [fit] I co-organise @JSOxford
+# [fit] I co-organise [@JSOxford](https://twitter.com/jsoxford)
+
+![inline](images/jsoxford.png)
 
 ---
 
@@ -51,15 +55,17 @@
 
 ---
 
-# [fit] [editor examples]
+![20%](images/example-codepen.png)
+![20%](images/example-jsfiddle.png)
+![20%](images/example-requirebin.png)
 
 ---
 
-# [fit] [code-along]
+![fit](images/code-along.png)
 
 ---
 
-# [fit] But how?
+# [fit] But how?!
 
 ---
 
@@ -187,7 +193,7 @@ caches.open('whatever')
 
 ---
 
-[textarea]
+![140%](images/textarea.png)
 
 ---
 
@@ -201,7 +207,7 @@ caches.open('whatever')
 
 ---
 
-[codemirror]
+![fit](images/codemirror.png)
 
 ---
 
@@ -381,9 +387,9 @@ for(var i = 99; i > 0; i++) {
 
 ---
 
-Putting it all together
 
-[demo]
+![fit](images/demo.png)
+
 
 ---
 
