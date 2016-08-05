@@ -15,6 +15,10 @@
 
 ---
 
+# [fit] Surfing
+
+---
+
 # [fit] Live coding <br />across all <br />the things
 
 ---
@@ -48,24 +52,24 @@
 
 ---
 
-# [fit] Using a browser
-
-* take the editing to the viewing
-* easy to skip filesystem
+# [fit] Putting our editor in a browser
 
 ---
 
-![20%](images/example-codepen.png)
-![20%](images/example-jsfiddle.png)
-![20%](images/example-requirebin.png)
+![inline 18%](images/example-jsbin.png)![inline 18%](images/example-codepen.png)
+
+![inline 18%](images/example-jsfiddle.png)![inline 18%](images/example-requirebin.png)
 
 ---
 
-![fit](images/code-along.png)
+![fit inline](images/code-along.png)
+
+# bit.ly/mdevaug
+
 
 ---
 
-# [fit] But how?!
+# [fit] But, how?!
 
 ---
 
@@ -79,13 +83,20 @@
 
 ---
 
-# [fit] #target content
+# [fit] #target contents
 
 ```html
 <body><script>
 {OUR JAVASCRIPT}
 </script></body>
 ```
+
+
+---
+
+# [fit] But, how…
+# …do we populate an iframe?!
+
 
 ---
 
@@ -108,6 +119,17 @@ source.onkeyup = function() {
 
 ---
 
+# hmmm
+
+* lack of error handling
+* length limitations
+* random encoding issues
+* restrictions
+
+![inline left](images/btoa.png)
+
+---
+
 alternatively
 
 # [fit] Blobs
@@ -117,7 +139,12 @@ alternatively
 ---
 
 ```js
+b = new Blob(['…'], {type: 'text/html'})
+```
 
+---
+
+```js
 b = new Blob(['…'], {type: 'text/html'})
 
 url = URL.createObjectURL(b)
@@ -143,6 +170,18 @@ source.onkeyup = function() {
 
 ---
 
+# hmmm!
+
+* not stored on the stack
+* safe, and lots of control
+* sounds cool
+
+…
+
+* Object URLs are transient
+
+---
+
 or, maybe
 
 # [fit] Service <br />Workers
@@ -151,7 +190,11 @@ or, maybe
 
 ```js
 serviceWorker.register('worker-script.js')
+```
 
+---
+
+```js
 // worker-script.js
 self.addEventListener('fetch', event =>
   event.respondWith(
@@ -201,9 +244,11 @@ caches.open('whatever')
 
 ## (maybe don't write one yourself)
 
-* CodeMirror
 * Ace Editor
 * Monaco
+* CodeMirror
+
+^ Atom is interesting
 
 ---
 
@@ -317,6 +362,16 @@ All pretty cool, though…
 * minimal code-rewriting
 * tree shaking
 * d3, THREE.js
+
+
+---
+
+# Rollup
+
+* embracing ES2015 modules
+* minimal code-rewriting
+* tree shaking
+* d3, THREE.js
 * You're the best, Rich Harris
 
 
@@ -395,3 +450,52 @@ for(var i = 99; i > 0; i++) {
 
 ## Part 2
 # [fit] across all <br/>the things
+
+---
+
+## Why I built code-along
+### Experimenting with multi-device coding
+
+---
+
+## /1
+# [fit] Collaboration
+
+---
+
+![left fit](images/collab-pusher.png)
+![right fit](images/collab-max.png)
+
+---
+
+
+## /2
+# [fit] Broadcast
+
+---
+
+
+## /2.1 (Broadcast)
+# [fit] For development
+
+---
+
+
+## /2.2 (Broadcast)
+# [fit] For talk-workshops
+
+---
+
+
+## /3
+# [fit] Talking stick <br/>Collaboration
+
+---
+
+…
+
+---
+
+# Thanks for listening
+
+# [fit] @benjaminbenben
