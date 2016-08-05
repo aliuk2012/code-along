@@ -21,7 +21,7 @@ const session_options = {
 }
 
 if (app.get('env') === 'production') {
-  app.set('trust proxy', 1)
+  app.set('trust proxy', 2)
   session_options.cookie.secure = true
 }
 
