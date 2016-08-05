@@ -28,6 +28,16 @@ if(document.location.hash != '#master') {
 
       })
 
+      // Pusher.logToConsole = true
+
+      var channel = pusher.subscribe('presence-codealong')
+      channel.bind('pusher:subscription_succeeded', function(e){
+        var element = document.getElementById('connection-state')
+        element.style.display = 'block'
+        element.className = 'connected'
+        element.innerText = '_'+e.myID
+      })
+
     })
 
 } else {
