@@ -125,10 +125,40 @@ app.post('/auth', parser, (req, res) => {
 })
 
 
-// app.post('/store', (req, res) => {
-//   res.sendStatus(200)
-// })
 
+// Storage limitiations
+//  Rate per user - .6s
+//  Object size - 50chars
+//  Per user - 10 keys
+//  Users - 200 -> 2000 (depends on keys)
+
+const RateLimit = require('express-rate-limit')
+const RedisStore = require('rate-limit-redis')
+const store = require('./lib/store')
+
+// 40 reqs a minute
+var limiter = new RateLimit({
+  windowMs: 30000,
+  max: 20,
+  delayMs: 0,
+  keyGenerator: req => req.session.pusher_user_id || 'nope'
+})
+
+app.post('/store', limiter, bodyParser.json(), parser, (req, res) => {
+  if(!req.session.pusher_user_id) return res.sendStatus(401)
+  if(!(req.body.key && req.body.value)) return res.sendStatus(400)
+
+  store(
+    req.session.pusher_user_id,
+    req.body.key,
+    req.body.value
+  )
+  res.sendStatus(200)
+})
+
+app.get('/store', limiter, (req, res) => {
+  res.send(store.getSource())
+})
 
 
 app.listen(process.env.PORT || 5000)

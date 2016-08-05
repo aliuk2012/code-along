@@ -30,13 +30,35 @@ if(document.location.hash != '#master') {
 
       // Pusher.logToConsole = true
 
-      var channel = pusher.subscribe('presence-codealong')
-      channel.bind('pusher:subscription_succeeded', function(e){
+      var presence = pusher.subscribe('presence-codealong')
+      presence.bind('pusher:subscription_succeeded', function(e){
         var element = document.getElementById('connection-state')
         element.style.display = 'block'
         element.className = 'connected'
         element.innerText = '_'+e.myID
       })
+
+
+      var store = pusher.subscribe('codealong-store')
+      store.bind('update', function(event){
+
+      })
+
+      /*
+      fetch('/store',{
+          method: 'POST',
+          body: JSON.stringify({
+            key: 'THE KEY',
+            value: 'MY VALUE'
+          }),
+          credentials:'same-origin',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        }).then(function(d){console.log(d)})
+      */
+
 
     })
 
