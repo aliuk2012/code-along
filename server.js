@@ -12,12 +12,21 @@ const Store = require('connect-redis')(session)
 
 app.use(express.static('./public'))
 
-app.use(session({
+console.log(app.get('env'))
+
+const session_options = {
   store: new Store({client: redis}),
   secret: process.env.SECRET || 'whatever'
-}))
+}
 
-app.use(bodyParser.urlencoded({ extended: false }))
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1)
+  sess.cookie.secure = true
+}
+
+app.use(session(session_options))
+
+const parser = bodyParser.urlencoded({ extended: false })
 
 const pusher = new Pusher({
   appId: process.env.p_app_id,
@@ -27,20 +36,30 @@ const pusher = new Pusher({
   encrypted: true
 })
 
-app.post('/pusher/auth', (req, res) => {
+app.post('/pusher/auth', parser, (req, res, next) => {
 
   const socket_id     = req.body.socket_id
   const channel_name  = req.body.channel_name
 
-  // todo - assign a incrementing number attached to session
-  const data = {
-    user_id: socket_id,
-    user_info: {}
-  }
-
-  res.send(
-    pusher.authenticate(socket_id, channel_name, data)
+  Promise.resolve(
+    req.session.pusher_user_id ||
+    redis.incr('pusher_user_id_counter')
+    .then(i => req.session.pusher_user_id = i)
   )
+  .then( user_id => {
+
+
+    const data = {
+      user_id: user_id,
+      user_info: {}
+    }
+
+    res.send(
+      pusher.authenticate(socket_id, channel_name, data)
+    )
+  })
+  .catch(next)
+
 })
 
 app.get('/pusher/config', (req, res) => {
@@ -62,7 +81,7 @@ app.get('/content', (req, res) => {
 
 var readOnly = false
 
-app.put('/content', bodyParser.json(), (req, res) => {
+app.put('/content', parser, bodyParser.json(), (req, res) => {
 
   if(!req.session.auth) return res.sendStatus(401)
 
@@ -99,10 +118,46 @@ app.put('/readonly/off', bodyParser.json(), (req, res) => {
 
 app.get('/auth', (req, res) => res.send(req.session.auth?'YES':'NO'))
 
-app.post('/auth', (req, res) => {
+app.post('/auth', parser, (req, res) => {
   var authed = req.body.password == process.env.PASSWORD
   req.session.auth = authed
   res.sendStatus(authed? 200 : 401)
+})
+
+
+
+// Storage limitiations
+//  Rate per user - .6s
+//  Object size - 50chars
+//  Per user - 10 keys
+//  Users - 200 -> 2000 (depends on keys)
+
+const RateLimit = require('express-rate-limit')
+const RedisStore = require('rate-limit-redis')
+const store = require('./lib/store')
+
+// 40 reqs a minute
+var limiter = new RateLimit({
+  windowMs: 30000,
+  max: 20,
+  delayMs: 0,
+  keyGenerator: req => req.session.pusher_user_id || 'nope'
+})
+
+app.post('/store', limiter, bodyParser.json(), parser, (req, res) => {
+  if(!req.session.pusher_user_id) return res.sendStatus(401)
+  if(!(req.body.key && req.body.value)) return res.sendStatus(400)
+
+  store(
+    req.session.pusher_user_id,
+    req.body.key,
+    req.body.value
+  )
+  res.sendStatus(200)
+})
+
+app.get('/store', limiter, (req, res) => {
+  res.send(store.getSource())
 })
 
 
