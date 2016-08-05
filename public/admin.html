@@ -35,12 +35,25 @@
 <button class="send">💥</button>
 
 
-<h3>An editor</h3>
+<h3>An editor part 1</h3>
 <pre><code>var source = document.createElement('textarea')
 var target = document.createElement('iframe')
 
 document.body.appendChild(source)
 document.body.appendChild(target)
+
+document.body.style.margin = '4em'
+</code></pre>
+<button class="send">💥</button>
+
+<h3>An editor part 2</h3>
+<pre><code>var source = document.createElement('textarea')
+var target = document.createElement('iframe')
+
+document.body.appendChild(source)
+document.body.appendChild(target)
+
+document.body.style.margin = '4em'
 
 source.onkeyup = function(){
   target.src = 'data:text/html;charset=utf-8,' +
@@ -53,17 +66,29 @@ source.onkeyup = function(){
 
 
 <h3>Slow Disco disco</h3>
-<pre><code>import {circle, clear} from 'draw'
+<pre><code>import {circle} from 'draw'
 
 circle(0.2)
 
 document.body.style.transition = '.2s'
 
+const c = (h) =>
+  `hsl(${h * 360}, 50%, 50%)`
+
 setInterval(function(){
   document.body.style.background =
-    `hsl(${Math.random()*360}, 100%, 50%)`
+    c(Math.random())
 }, 700)</code></pre>
 <button class="send">💥</button>
+
+
+<h3>colour fn</h3>
+<pre><code>const c = (h) =>
+  `hsl(${h * 360}, 50%, 50%)`
+
+document.body.style.background = c(Math.random())</code></pre>
+<button class="send">💥</button>
+
 
 <style media="screen">
   pre {
