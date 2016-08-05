@@ -18,7 +18,6 @@ function getContext() {
 
 
 export function circle(s){
-
   var ctx = getContext()
   ctx.beginPath()
   ctx.arc(w/2,h/2,(s||1) * Math.min(w,h)/2,0,2*Math.PI)
@@ -34,6 +33,15 @@ export function arrow(){
   console.log("TODO: draw arrow")
 }
 
+export function clear() {
+  var ctx = getContext()
+  ctx.clearRect(0,0,w,h)
+}
+
+export function fill(color) {
+  var ctx = getContext()
+  ctx.fillStyle = color
+}
 
 
 const bodyElementStyle = document.body.style
