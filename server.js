@@ -31,14 +31,6 @@ if (app.get('env') === 'production') {
   })
 }
 
-app.use((req, res, next) => {
-  console.log('sadf')
-  if (req.headers['x-forwarded-proto'] != 'https') {
-    res.redirect('https://www.cojs.co' + req.url)
-  } else {
-    next()
-  }
-})
 
 
 app.use(express.static('./public'))
