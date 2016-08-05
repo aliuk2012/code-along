@@ -10,8 +10,6 @@ const app = express()
 const redis = new Redis(process.env.REDIS_URL)
 const Store = require('connect-redis')(session)
 
-app.use(express.static('./public'))
-
 console.log(app.get('env'))
 
 const session_options = {
@@ -27,10 +25,23 @@ if (app.get('env') === 'production') {
   app.use((req, res, next) => {
     if (req.headers['x-forwarded-proto'] != 'https') {
       res.redirect('https://www.cojs.co' + req.url)
+    } else {
+      next()
     }
-    next();
   })
 }
+
+app.use((req, res, next) => {
+  console.log('sadf')
+  if (req.headers['x-forwarded-proto'] != 'https') {
+    res.redirect('https://www.cojs.co' + req.url)
+  } else {
+    next()
+  }
+})
+
+
+app.use(express.static('./public'))
 
 app.use(session(session_options))
 
