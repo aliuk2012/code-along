@@ -28,6 +28,7 @@ if (app.get('env') === 'production') {
     if (req.headers['x-forwarded-proto'] != 'https') {
       res.redirect('https://www.cojs.co' + req.url)
     }
+    next();
   })
 }
 
