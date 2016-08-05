@@ -162,8 +162,8 @@ app.get('/store', limiter, (req, res) => {
   res.send(store.getSource())
 })
 
-app.get('/.well-known/acme-challenge/mm8bXIsLYchCArxhe15nMO24KDMm_4NDlP9Xw_SxTgA', (req, res) => {
-  res.send('mm8bXIsLYchCArxhe15nMO24KDMm_4NDlP9Xw_SxTgA.YrwmERb5B8tzJXXeqFFBS25ZCYDE_vgpeHG-1znUCXA')
+app.get('.well-known/acme-challenge/s5AUxYPS70lp1ijjUiqQ-5EgaR4fgR_gkc1RaldTZfI', (req, res) => {
+  res.send('s5AUxYPS70lp1ijjUiqQ-5EgaR4fgR_gkc1RaldTZfI.YrwmERb5B8tzJXXeqFFBS25ZCYDE_vgpeHG-1znUCXA')
 })
 
 
