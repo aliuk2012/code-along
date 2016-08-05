@@ -16,7 +16,8 @@ console.log(app.get('env'))
 
 const session_options = {
   store: new Store({client: redis}),
-  secret: process.env.SECRET || 'whatever'
+  secret: process.env.SECRET || 'whatever',
+  cookie: {}
 }
 
 if (app.get('env') === 'production') {
@@ -156,6 +157,7 @@ app.post('/store', limiter, bodyParser.json(), parser, (req, res) => {
   res.sendStatus(200)
 })
 
+// todo - persist the store
 app.get('/store', limiter, (req, res) => {
   res.send(store.getSource())
 })
