@@ -1,4 +1,10 @@
 var store = {getAll: function() {return []}, set: function(){}}
+var target_iframe = document.querySelector('iframe')
+
+// setInterval(function(){
+//   target_iframe.contentWindow.postMessage({r:Math.random()}, '*')
+// target_iframe.contentWindow.postMessage('asdf','*')
+// }, 1000)
 
 
 // initial populate
@@ -148,26 +154,32 @@ function remoteStore(pusher, user_id){
       state.pop()
     }
 
+    notify(user, key, value)
+
   }
 
-  function set(key, value) {
+  function setItem(key, value) {
     key   = norm(key, 10)
     value = norm(value, 50)
 
+    var set = localforage.setItem(key, value)
     setRemote(key, value)
+    notify(null, key, value)
 
-    return localforage.setItem(key, value)
+    return set
   }
 
-  function getAll(key){
-    return state.filter(function(item){
-      return item[1] == key
-    }).map(function(item){
-      return item[2]
-    })
+  function getItems(key){
+    return Promise.resolve(
+      state.filter(function(item){
+        return item[1] == key
+      }).map(function(item){
+        return item[2]
+      })
+    )
   }
 
-  function get(key){
+  function getItem(key){
     return localforage.getItem(key)
   }
 
@@ -195,12 +207,23 @@ function remoteStore(pusher, user_id){
     return String(t).trim().substr(0,l||10)
   }
 
+  function notify(user, key, value){
+    target_iframe.contentWindow.postMessage({
+      user:user,
+      key:key,
+      value:value
+    }, '*')
+  }
+
   return {
-    set: set,
-    get: get,
-    getAll: getAll,
+
+    setItem:  setItem,
+    getItem:  getItem,
+    getItems: getItems,
+
     source: function(){
       return source
     }
+
   }
 }
