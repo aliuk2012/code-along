@@ -33,7 +33,7 @@ pusherClient.then(function(pusher){
 
 
 // there are backend checks too
-var isMaster = document.location.hash != '#master'
+var isMaster = document.location.hash == '#master'
 
 
 /*
