@@ -3,15 +3,98 @@
   <head>
     <meta charset="utf-8">
     <title>input</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
     <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
     <script type="text/javascript" src="lib/hammer.js"></script>
+    <style media="screen">
+      body{
+        display: flex;
+      }
+
+      #buttons {
+        flex:1;
+        display: flex;
+        flex-direction: column;
+      }
+      button {
+        flex:1;
+        margin: 1vmin;
+        font-size: 20vmin;
+        border: 3px solid #ccc;
+        background: #fff;
+        font-family: Inconsolata;
+        font-weight: 800
+      }
+
+      .pressed {
+        color: #f08
+      }
+
+    </style>
   </head>
   <body>
+    <canvas id="dial" width="300" height="300"></canvas>
+    <div id="buttons">
+      <button id="buttonA">A</button>
+      <button id="buttonB">B</button>
+    </div>
     <script type="text/javascript">
+
+      var notifyAngle = function(angle) {
+
+        fetch('/input', {
+          credentials: 'same-origin',
+          method: 'PUT',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            turn: angle
+          })
+        })
+      }
+
+      notifyAngle = throttle(notifyAngle, 250)
+
+      function handle(b, state){
+        var json = {}
+        json[b] = state
+        var body = JSON.stringify(json)
+
+        return function(e){
+          e.preventDefault()
+
+          this.className = state
+
+          fetch('/input', {
+            credentials: 'same-origin',
+            method: 'PUT',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json'
+            },
+            body: body
+          })
+        }
+      }
+
+      buttonA.addEventListener('mousedown', handle('A', 'pressed'))
+      buttonA.addEventListener('touchstart', handle('A', 'pressed'))
+      buttonA.addEventListener('mouseup', handle('A', 'released'))
+      buttonA.addEventListener('touchend', handle('A', 'released'))
+
+      buttonB.addEventListener('mousedown', handle('B', 'pressed'))
+      buttonB.addEventListener('touchstart', handle('B', 'pressed'))
+      buttonB.addEventListener('mouseup', handle('B', 'released'))
+      buttonB.addEventListener('touchend', handle('B', 'released'))
+
+
+
+
       var size = 300
-      var canvas = document.createElement('canvas')
-      document.body.appendChild(canvas)
+      var canvas = document.getElementById('dial')
 
       canvas.width = canvas.height = size
 
@@ -44,6 +127,8 @@
         var angle = ((r/(2*Math.PI))*360)
         angle = ((angle % 360) + 360)%360
 
+        notifyAngle(angle)
+
         ctx.fillText(angle.toFixed(0), 0,0)
       }
 
@@ -53,7 +138,7 @@
 
       circle(0, '#08f')
 
-      new Hammer(canvas)
+      new Hammer(canvas,{ preventDefault: true })
       .on('pan', function(ev) {
         var d = ev.deltaX + ev.deltaY
         rotationDelta = d/100
@@ -66,6 +151,30 @@
         circle(rotation, '#08f')
       })
 
+
+
+      function throttle(fn, threshhold, scope) {
+        threshhold || (threshhold = 250);
+        var last,
+            deferTimer;
+        return function () {
+          var context = scope || this;
+
+          var now = +new Date,
+              args = arguments;
+          if (last && now < last + threshhold) {
+            // hold on to it
+            clearTimeout(deferTimer);
+            deferTimer = setTimeout(function () {
+              last = now;
+              fn.apply(context, args);
+            }, threshhold + last - now);
+          } else {
+            last = now;
+            fn.apply(context, args);
+          }
+        };
+      }
 
     </script>
   </body>

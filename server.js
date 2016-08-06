@@ -110,6 +110,33 @@ app.put('/content', parser, bodyParser.json(), (req, res) => {
 
 })
 
+
+app.put('/input', parser, bodyParser.json(), (req, res) => {
+  if(!req.session.auth) return res.sendStatus(401)
+  res.sendStatus(200)
+
+  if(req.body.turn) {
+    redis.hset('input', 'turn', req.body.turn)
+  }
+  if(req.body.A) {
+    redis.hset('input', 'a', req.body.A)
+  }
+  if(req.body.B) {
+    redis.hset('input', 'b', req.body.B)
+  }
+
+  // auto expire in 40 mins
+  redis.expire('input', 60*40)
+
+})
+
+app.get('/input', (req, res) => {
+  redis.hgetall('input')
+    .then(data => {
+      res.send(data)
+    })
+})
+
 app.put('/readonly/on', bodyParser.json(), (req, res) => {
   if(!req.session.auth) return res.sendStatus(401)
   readOnly = true
