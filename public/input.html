@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>input</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <script type="text/javascript" src="lib/hammer.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var size = 300
+      var canvas = document.createElement('canvas')
+      document.body.appendChild(canvas)
+
+      canvas.width = canvas.height = size
+
+      var ctx = canvas.getContext('2d')
+      ctx.lineWidth = 7
+      ctx.strokeStyle = '#bbb'
+      ctx.font = '48px Inconsolata'
+      ctx.textAlign = 'center'
+      ctx.textBaseline = 'middle'
+
+      ctx.translate(size/2,size/2)
+
+      function circle(r, f){
+        ctx.clearRect(-size/2,-size/2,size, size)
+
+        ctx.save()
+
+        ctx.rotate(r)
+        ctx.beginPath()
+        ctx.arc(0,0,size/2.5,0,2*Math.PI)
+        ctx.stroke()
+
+        ctx.fillStyle = f
+        ctx.beginPath()
+        ctx.arc(0, -size/3, size/20, 0, 2*Math.PI)
+        ctx.fill()
+
+        ctx.restore()
+
+        var angle = ((r/(2*Math.PI))*360)
+        angle = ((angle % 360) + 360)%360
+
+        ctx.fillText(angle.toFixed(0), 0,0)
+      }
+
+
+      var rotation = 0
+      var rotationDelta = 0
+
+      circle(0, '#08f')
+
+      new Hammer(canvas)
+      .on('pan', function(ev) {
+        var d = ev.deltaX + ev.deltaY
+        rotationDelta = d/100
+        circle(rotation + rotationDelta,'#f08')
+      })
+      .on('panend', function(ev){
+        rotation += rotationDelta;
+        rotationDelta = 0
+
+        circle(rotation, '#08f')
+      })
+
+
+    </script>
+  </body>
+</html>
