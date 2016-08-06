@@ -2,6 +2,7 @@
 
 var store = (function (){
 
+  var _self;
   var state = []
 
   function store(user, key, value) {
@@ -48,7 +49,7 @@ var store = (function (){
   function getItems(key){
     return Promise.resolve(
       state.filter(function(item){
-        return item[1] == key
+        return item[1] == key && item[0] != _self
       }).map(function(item){
         return item[2]
       })
@@ -108,6 +109,8 @@ var store = (function (){
     },
 
     connect: function(pusher, user_id, endpoint, channel) {
+      _self = user_id
+
       // populate
       fetch(endpoint || '/store')
         .then(function(res) {return res.json()})
