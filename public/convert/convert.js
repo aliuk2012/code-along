@@ -16,7 +16,7 @@ var modules = [
 function convert (source) {
 
   // IMPORTANT, loop protect must be loaded frontend too
-  source = loopProtect(source)
+  source = loopProtect(source + '\n')
 
   return rollup.rollup({
     entry: '__main__',
