@@ -99,8 +99,8 @@ button span {
 }
 
 .CodeMirror {
-  margin: 1em;
-  height: 80%;
+  /*margin: 1em;*/
+  height: 100%;
   font-family: 'Inconsolata', monospace;
 }
 .CodeMirror .error-widget {
