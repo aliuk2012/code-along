@@ -1,7 +1,6 @@
 var subscribers = []
 
 window.addEventListener('message', function(e){
-  console.log("ok", e.data)
   subscribers.forEach(function(s){
     s(e.data)
   })
@@ -19,13 +18,16 @@ export function getItems(key) {
   return window.parent.store.getItems(key)
 }
 
-// needs to be different for admin
+// needs to be different for admin?
 export function subItem(key, fn) {
-  console.log("subscribing", key)
+  // console.log("subscribing", key)
+
   subscribers.push(function(data){
     if(data.user == null && data.key == key) {
-      // getItem(fn)
-      fn(data.value)
+      getItem(key).then(fn)
+    }
+    if(data.all) {
+      getItem(key).then(fn)
     }
   })
 
@@ -33,10 +35,13 @@ export function subItem(key, fn) {
 }
 
 export function subItems(key, fn) {
-  console.log("subscribing All", key)
+  // console.log("subscribing All", key)
 
   subscribers.push(function(data){
     if(data.user != null && data.key == key) {
+      getItems(key).then(fn)
+    }
+    if(data.all) {
       getItems(key).then(fn)
     }
   })

@@ -957,3 +957,4 @@
     lib$es6$promise$polyfill$$default();
 }).call(this);
 
+ES6Promise.polyfill();
