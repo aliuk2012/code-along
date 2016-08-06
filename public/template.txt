@@ -71,11 +71,18 @@
 
       console.log = (function(original){
         return function(){
-          _append_log([].join.call(arguments, ', '))
+          _append_log([].map.call(arguments, function(j){return JSON.stringify(j)}).join(', '))
 
           original.apply(this, arguments)
         }
       })(console.log)
+
+      var fetch = (function(original){
+        return function(path){
+          if(path[0]=='/') arguments[0] = window.parent.location.origin + path
+          return original.apply(window,arguments)
+        }
+      })(window.fetch)
 
     </script>
   </head>
