@@ -19,18 +19,26 @@ var error_el = document.getElementById('error')
 
 var template = fetch('template.txt')
                  .then(function(r){return r.text()})
+                 .then(function(text){
+                   var parts = text.split('{{INJECT}}')
+                   return function(code){
+                     return new Blob([
+                       parts[0],
+                       code,
+                       parts[1]
+                     ],{type: 'text/html'})
+                   }
+                 })
 
 function load(){
   convert(code.getValue())
     .then(function(code){
       template
-        .then(function(text) {
+        .then(function(template) {
 
           URL.revokeObjectURL(iframe.src)
 
-          var blob = new Blob([text
-            .split('{{INJECT}}')
-            .join(code)], {type: 'text/html'})
+          var blob = template(code)
 
           var url = URL.createObjectURL(blob)
           iframe.src = url
