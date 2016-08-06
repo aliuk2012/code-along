@@ -31,7 +31,7 @@ pusherClient.then(function(pusher){
     element.innerText = '_'+e.myID
 
     // store = remoteStore(pusher, e.myID)
-    
+
     store.connect(
       pusher,
       e.myID,

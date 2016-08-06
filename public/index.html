@@ -29,24 +29,22 @@
       <img src="icon-chevron.svg" />
     </button>
 
-    <div id="connection-modal" class="hidden">
-      <form>
-        <label>
-          <span>&larr;</span> connected</a>
-          <input type="radio" name="connection" value="connected">
-        </label>
+    <form id="connection-modal" class="hidden">
+      <label>
+        <span>&larr;</span> connected</a>
+        <input type="radio" name="connection" value="connected">
+      </label>
 
-        <label>
-          <span>↺</span> independent</a>
-          <input type="radio" name="connection" value="independent">
-        </label>
+      <label>
+        <span>↺</span> independent</a>
+        <input type="radio" name="connection" value="independent">
+      </label>
 
-        <label>
-          <span>&rarr;</span></a>
-          <input type="text" name="other" value="" placeholder="other">
-        </label>
-      </form>
-    </div>
+      <label>
+        <span>&rarr;</span></a>
+        <input type="text" name="other" value="" placeholder="other" id="other-editor">
+      </label>
+    </form>
 
     <script src="codemirror/codemirror-compressed.js"></script>
     <script src="convert/lib/rollup.browser.js"></script>
@@ -64,6 +62,46 @@
 
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
     <script src="connect.js"></script>
+
+    <script type="text/javascript">
+      function getSelection() {
+
+        var modal = document.getElementById('connection-modal')
+        var other_editor = document.getElementById('other-editor')
+
+        var connected =
+
+        return new Promise(function(resolve){
+
+          modal.className = ''
+
+          modal.children[0].addEventListener('click', function(e){
+            e.preventDefault()
+            resolve('connected')
+          }, false)
+          modal.children[1].addEventListener('click', function(e){
+            e.preventDefault()
+            resolve('independent')
+          })
+          modal.children[2].addEventListener('click', function(e){
+            e.preventDefault()
+
+            other_editor.focus()
+          })
+          modal.addEventListener('submit', function(e){
+            e.preventDefault()
+            resolve('other-' + other_editor.value)
+          })
+
+        })
+        .then(function(value){
+          modal.className = 'hidden'
+          return value
+        })
+      }
+
+    </script>
+
 
   </body>
 </html>

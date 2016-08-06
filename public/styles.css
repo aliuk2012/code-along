@@ -247,12 +247,13 @@ iframe {
   font-size: 5vmin;
   background: rgba(255,255,255,0.8);
   box-shadow: rgba(0,0,0,0.3) 0 0 15px;
-  /*transition: transform .2s;*/
+  transition: transform .2s;
 
 }
 #connection-modal.hidden {
-  /*transform: translate(-50%, -50%) scale(0.001);*/
+  transform: translate(-50%, -50%) scale(0.001);
   display: none;
+  /*top:-100%;*/
 }
 
 #connection-modal ul {
