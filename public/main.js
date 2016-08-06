@@ -1,3 +1,5 @@
+ES6Promise.polyfill()
+
 var htm = document.getElementsByTagName('html')[0]
 toggle.onclick = function(e){
   e.preventDefault()

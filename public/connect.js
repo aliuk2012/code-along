@@ -101,9 +101,10 @@ if(isMaster) {
 
 }
 
-function remoteStore(pusher){
+function remoteStore(pusher, user_id){
 
   var state = []
+  var local = {}
 
   // populate
   fetch('/store')
@@ -147,25 +148,15 @@ function remoteStore(pusher){
       state.pop()
     }
 
-
-    function norm(t, l){
-      return String(t).trim().substr(0,l||10)
-    }
   }
 
-  function set(key, data) {
-    fetch('/store',{
-      method: 'POST',
-      body: JSON.stringify({
-        key: key,
-        value: data
-      }),
-      credentials:'same-origin',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
+  function set(key, value) {
+    key   = norm(key, 10)
+    value = norm(value, 50)
+
+    setRemote(key, value)
+
+    return localforage.setItem(key, value)
   }
 
   function getAll(key){
@@ -176,15 +167,20 @@ function remoteStore(pusher){
     })
   }
 
+  function get(key){
+    return localforage.getItem(key)
+  }
+
+  // push up (debounce per-key)
   var timers = {}
-  function setDebounced(key, data) {
+  function setRemote(key, value) {
     clearTimeout(timers[key])
     timers[key] = setTimeout(function(){
       fetch('/store',{
         method: 'POST',
         body: JSON.stringify({
           key: key,
-          value: data
+          value: value
         }),
         credentials:'same-origin',
         headers: {
@@ -195,8 +191,13 @@ function remoteStore(pusher){
     }, 500)
   }
 
+  function norm(t, l){
+    return String(t).trim().substr(0,l||10)
+  }
+
   return {
-    set: setDebounced,
+    set: set,
+    get: get,
     getAll: getAll,
     source: function(){
       return source
