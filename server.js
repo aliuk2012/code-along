@@ -159,11 +159,19 @@ app.post('/store', limiter, bodyParser.json(), parser, (req, res) => {
   if(!req.session.pusher_user_id) return res.sendStatus(401)
   if(!(req.body.key && req.body.value)) return res.sendStatus(400)
 
-  store(
+  var row = store(
     req.session.pusher_user_id,
     req.body.key,
     req.body.value
   )
+
+  if(row) {
+    pusher.trigger('codealong_store', 'add', {
+      rows:[row]
+    })
+  }
+
+
   res.sendStatus(200)
 })
 
@@ -171,10 +179,5 @@ app.post('/store', limiter, bodyParser.json(), parser, (req, res) => {
 app.get('/store', limiter, (req, res) => {
   res.send(store.getSource())
 })
-
-app.get('/.well-known/acme-challenge/s5AUxYPS70lp1ijjUiqQ-5EgaR4fgR_gkc1RaldTZfI', (req, res) => {
-  res.send('s5AUxYPS70lp1ijjUiqQ-5EgaR4fgR_gkc1RaldTZfI.YrwmERb5B8tzJXXeqFFBS25ZCYDE_vgpeHG-1znUCXA')
-})
-
 
 app.listen(process.env.PORT || 5000)

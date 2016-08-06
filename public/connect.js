@@ -1,3 +1,60 @@
+var source = []
+
+function store(user, key, value) {
+  user  = norm(user, 10)
+  key   = norm(key, 10)
+  value = norm(value, 50)
+
+  if(!(
+    user && key && value
+  )) return false
+
+  var user_count = 0
+  source = source.filter(function(s){
+    // TODO - check if array.splice would be more efficient
+    return !(
+      s[0] == user && (
+        s[1] == key || // key matches
+        user_count++ > 10 // we've see too many by this user
+      )
+    )
+  })
+
+  source.unshift([user, key, value])
+
+  while(source.length > 2000) {
+    source.pop()
+  }
+
+
+  function norm(t, l){
+    return String(t).trim().substr(0,l||10)
+  }
+}
+
+function set(key, data) {
+  fetch('/store',{
+    method: 'POST',
+    body: JSON.stringify({
+      key: key,
+      value: data
+    }),
+    credentials:'same-origin',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+  }).then(function(d){console.log(d)})
+}
+
+function getAll(key){
+  return source.filter(function(item){
+    return item[1] == key
+  }).map(function(item){
+    return item[2]
+  })
+}
+
 
 var populate = fetch('/content')
   .then(function(res){ return res.text()})
@@ -39,9 +96,16 @@ if(document.location.hash != '#master') {
       })
 
 
-      var store = pusher.subscribe('codealong-store')
-      store.bind('update', function(event){
-
+      fetch('/store')
+        .then(function(res) {return res.json()})
+        .then(function(json) {
+          source = json
+        })
+      var storeC = pusher.subscribe('codealong_store')
+      storeC.bind('add', function(event){
+        (event.rows||[]).forEach(function(row){
+          store.apply(null, row)
+        })
       })
 
       /*
