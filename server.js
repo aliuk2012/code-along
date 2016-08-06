@@ -156,6 +156,22 @@ var limiter = new RateLimit({
   keyGenerator: req => req.session.pusher_user_id || 'nope'
 })
 
+// Storage random test
+// setInterval(function(){
+//   var m = 'f-' + Math.random().toString(16).substr(2,1)
+//   var row = store(
+//     m,
+//     Math.random().toString(16).substr(2,6),
+//     // 'color'
+//     '#' + Math.random().toString(16).substr(2,6)
+//   )
+//   if(row) {
+//     pusher.trigger('codealong_store', 'add', {
+//       rows:[row]
+//     })
+//   }
+// }, 10)
+
 app.post('/store', limiter, bodyParser.json(), parser, (req, res) => {
   if(!req.session.pusher_user_id) return res.sendStatus(401)
   if(!(req.body.key && req.body.value)) return res.sendStatus(400)
