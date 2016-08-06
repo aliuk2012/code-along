@@ -29,6 +29,25 @@
       <img src="icon-chevron.svg" />
     </button>
 
+    <div id="connection-modal" class="hidden">
+      <form>
+        <label>
+          <span>&larr;</span> connected</a>
+          <input type="radio" name="connection" value="connected">
+        </label>
+
+        <label>
+          <span>↺</span> independent</a>
+          <input type="radio" name="connection" value="independent">
+        </label>
+
+        <label>
+          <span>&rarr;</span></a>
+          <input type="text" name="other" value="" placeholder="other">
+        </label>
+      </form>
+    </div>
+
     <script src="codemirror/codemirror-compressed.js"></script>
     <script src="convert/lib/rollup.browser.js"></script>
     <script src="convert/lib/buble.deps.js"></script>

@@ -236,3 +236,70 @@ iframe {
   bottom: 3.75em;
   transform: rotate(90deg);
 }*/
+
+
+#connection-modal {
+  z-index: 100;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 5vmin;
+  background: rgba(255,255,255,0.8);
+  box-shadow: rgba(0,0,0,0.3) 0 0 15px;
+  /*transition: transform .2s;*/
+
+}
+#connection-modal.hidden {
+  /*transform: translate(-50%, -50%) scale(0.001);*/
+  display: none;
+}
+
+#connection-modal ul {
+  list-style: none;
+  margin:0;
+  padding: 1em;
+}
+
+
+#connection-modal span {
+  display:inline-block;
+  width: 1em;
+}
+
+#connection-modal label {
+  color: #000;
+  text-decoration: none;
+  display: block;
+  padding:.6em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .1s;
+  color: #333;
+}
+#connection-modal input[type=radio]{
+  display:none;
+}
+
+#connection-modal label:hover {
+  background: #dee;
+  color: #000
+}
+
+#connection-modal input {
+  display: inline;
+  width: 3em;
+  border:none;
+  border-bottom: 1px solid #444;
+  font-size: 1em;
+  font-family: inherit;
+  background: none;
+  padding:.1em;
+  width: 50%;
+
+}
+#connection-modal input:focus{
+  /*back*/
+  outline: none;
+  background: rgba(1,1,1,0.2)
+}
