@@ -146,6 +146,7 @@ app.post('/auth', parser, (req, res) => {
 const RateLimit = require('express-rate-limit')
 const RedisStore = require('rate-limit-redis')
 const store = require('./lib/store')
+store.setBacking(redis)
 
 // 40 reqs a minute
 var limiter = new RateLimit({
@@ -170,7 +171,6 @@ app.post('/store', limiter, bodyParser.json(), parser, (req, res) => {
       rows:[row]
     })
   }
-
 
   res.sendStatus(200)
 })
