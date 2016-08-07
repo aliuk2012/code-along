@@ -92,8 +92,12 @@ pusherClient.then(function(pusher){
 
     var element = document.getElementById('connection-state')
     element.style.display = 'block'
-    element.className = 'connected'
+    element.className = user_connection.type;
     element.innerText = ''+e.myID
+
+    if(user_connection.type == 'connect') {
+      element.innerText = e.myID + ' → ' + user_connection.target
+    }
 
     element.href = 'javascript:showConnectionDialog()'
 

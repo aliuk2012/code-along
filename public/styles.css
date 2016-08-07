@@ -87,15 +87,22 @@ button span {
   color: #08f;
 }
 
-#connection-state.changed {
-  color: #bf2020;
+#connection-state.default{
+  padding-right: 0.5em;
+  background-image: none;
+}
+#connection-state.default:after {
+  content:' ←';
+}
+
+#connection-state.independent {
   background-image: url(icon-reload.svg);
-  background-color: #eee;
-  cursor: pointer;
 }
-#connection-state.changed:hover {
-  background-color: #ccc;
+#connection-state.connect {
+  background-image: none;
+  padding-right: 0.5em;
 }
+
 
 #connection-state img {
   height: 1em;
