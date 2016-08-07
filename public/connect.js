@@ -8,6 +8,13 @@ var user_connection = (function(){
       type: 'independent'
     }
   }
+
+  if(href.indexOf('?master') > 0) {
+    return {
+      type: 'master'
+    }
+  }
+
   var match = href.match(/\?connect=(.+)/)
   if(match) {
     return {
@@ -95,9 +102,11 @@ pusherClient.then(function(pusher){
     element.className = user_connection.type;
     element.innerText = ''+e.myID
 
-    if(user_connection.type == 'connect') {
+    if(user_connection.type == 'connect')
       element.innerText = e.myID + ' → ' + user_connection.target
-    }
+
+    if(user_connection.type == 'master')
+      element.innerText = e.myID + ' (master)'
 
     element.href = 'javascript:showConnectionDialog()'
 
@@ -116,7 +125,7 @@ pusherClient.then(function(pusher){
 
 
 // there are backend checks too
-var isMaster = document.location.hash == '#master'
+var isMaster = user_connection.type == 'master'
 
 
 /*
