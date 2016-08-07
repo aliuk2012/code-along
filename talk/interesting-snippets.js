@@ -14,6 +14,16 @@ source.onkeyup = function(){
 
 
 
+document.body.innerText = 'Hello World!'
+document.body.style.backgroundColor = 'pink'
+
+
+
+
+
+
+
+
 import {set, getAll} from 'store'
 
 input('color', (value)=>{
@@ -75,3 +85,115 @@ subItems('color', (cs) => {
   console.log("SADFO",cs);
   output.innerText = cs.join(' + ')
 })
+
+
+
+
+
+
+
+
+
+import {setItem, getItem, getItems, subItem, subItems} from 'store'
+
+document.body.style.background = '#fff'
+
+var input = document.createElement('input')
+document.body.appendChild(input)
+
+input.style.margin = '5em'
+input.style.fontSize = '1em'
+input.type = 'color'
+
+input.addEventListener('change', function(){
+  setItem('c', this.value)
+  console.log(this.value)
+}, false)
+
+var output = document.createElement('div')
+document.body.appendChild(output)
+
+subItem('c', (c) => {
+  document.body.style.background = c
+})
+
+subItems('c', (cs) => {
+  output.innerHTML = ''
+  cs.forEach(c => {
+    var d = document.createElement('div')
+    d.style.backgroundColor = c
+    d.style.display = 'inline-block'
+    d.style.margin = '.2em'
+    d.style.padding = '2em'
+    d.style.borderRadius = '100%'
+    output.appendChild(d)
+  })
+})
+
+
+
+
+
+
+
+
+
+
+// EXAMPLES
+
+
+// SSE
+
+var source = new EventSource("script.php")
+source.onmessage = function(event) {
+    document.getElementById("result").innerHTML += event.data + "<br>"
+}
+
+//
+//
+//
+// ws://echo.websocket.org/
+
+
+const url = 'wss://ws-eu.pusher.com/app/663fbc85a06feec56503?client=js&version=3.2&protocol=5'
+const socket = new WebSocket(url)
+
+socket.onmessage = (event) => {
+  console.log(data)
+}
+
+websocket.send(JSON.stringify({
+  "event": "pusher:subscribe",
+  "data": {
+    "channel": "codealong_store"
+  }
+}))
+
+
+
+
+// connect to pusher raw-ly
+
+
+const url = 'wss://ws-eu.pusher.com/app/663fbc85a06feec56503?client=js&version=3.2&protocol=5'
+const socket = new WebSocket(url)
+
+socket.onmessage = (message) => {
+  const payload = JSON.parse(message.data)
+  const event = payload.event
+  const data = payload.data
+
+  console.log(event, data)
+
+}
+
+socket.onopen = () => {
+
+  socket.send(JSON.stringify({
+    "event": "pusher:subscribe",
+    "data": {
+      "channel": "turns"
+    }
+  }))
+
+}
