@@ -77,9 +77,13 @@ var showConnectionDialog = (function setup(){
 // target_iframe.contentWindow.postMessage('asdf','*')
 // }, 1000)
 
+var url = user_connection.target ?
+   '/content/' +  user_connection.target :
+   '/content'
 
+console.log(url)
 // initial populate
-var populate = fetch('/content')
+var populate = fetch(url)
   .then(function(res){ return res.text()})
   .then(function(text){
     code.setValue(text)
@@ -145,7 +149,11 @@ if(!publishing) {
   pusherClient
     .then(function(pusher){
 
-      var channel = pusher.subscribe('codealong')
+      var channelName = user_connection.target ?
+        'codealong_' + user_connection.target :
+        'codealong'
+
+      var channel = pusher.subscribe(channelName)
 
       channel.bind('update', function(action){
         console.log("update", action)
@@ -158,6 +166,8 @@ if(!publishing) {
 
       })
     })
+
+
 }
 
 
