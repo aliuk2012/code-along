@@ -85,6 +85,10 @@
         }
       })(window.fetch)
 
+      function help(){
+        document.getElementById('content').innerHTML = '<h2>Help</h2><h4><a target="_blank" href="https://gist.github.com/benfoxall/794f29efff7221402b16523cf80c1638">API Gist</a></h4>'
+      }
+
     </script>
   </head>
   <body>
