@@ -1,5 +1,70 @@
 var target_iframe = document.querySelector('iframe')
 
+var user_connection = (function(){
+  var href = document.location.href
+
+  if(href.indexOf('?independent') > 0) {
+    return {
+      type: 'independent'
+    }
+  }
+  var match = href.match(/\?connect=(.+)/)
+  if(match) {
+    return {
+      type: 'connect',
+      target: match[1]
+    }
+  }
+
+  return {
+    type: 'default'
+  }
+})()
+
+
+var showConnectionDialog = (function setup(){
+    var modal = document.getElementById('connection-modal')
+    var other_editor = document.getElementById('other-editor')
+    var overlay = document.getElementById('connection-overlay')
+
+    overlay.addEventListener('click', function(e){
+      overlay.className = modal.className = 'hidden'
+    })
+
+    switch (user_connection.type) {
+      case 'default':
+        modal.children[0].className = 'current'; break
+      case 'independent':
+        modal.children[1].className = 'current'; break
+      case 'connect':
+        modal.children[2].className = 'current'; break
+    }
+
+    modal.children[0].addEventListener('click', function(e){
+      e.preventDefault()
+      document.location = '/'
+    }, false)
+
+    modal.children[1].addEventListener('click', function(e){
+      e.preventDefault()
+      document.location = '/?independent'
+    })
+    modal.children[2].addEventListener('click', function(e){
+      e.preventDefault()
+      other_editor.focus()
+    })
+    modal.addEventListener('submit', function(e){
+      e.preventDefault()
+      document.location = '/?connect=' + other_editor.value
+    })
+
+    return function showDialog(){
+      modal.className = overlay.className = ''
+    }
+})()
+
+
+
 // setInterval(function(){
 //   target_iframe.contentWindow.postMessage({r:Math.random()}, '*')
 // target_iframe.contentWindow.postMessage('asdf','*')
@@ -28,7 +93,9 @@ pusherClient.then(function(pusher){
     var element = document.getElementById('connection-state')
     element.style.display = 'block'
     element.className = 'connected'
-    element.innerText = '_'+e.myID
+    element.innerText = ''+e.myID
+
+    element.href = 'javascript:showConnectionDialog()'
 
     // store = remoteStore(pusher, e.myID)
 

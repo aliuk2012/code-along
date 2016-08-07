@@ -71,7 +71,7 @@ button span {
 #connection-state{
   position: absolute;
   font-size: 1em;
-  z-index: 1000;
+  z-index: 105;
   bottom:0;
   right:0;
   padding:.5em;
@@ -81,6 +81,10 @@ button span {
   background-size: 1.5em;
   padding-right: 1.5em;
   color: #000000;
+  text-decoration: none;
+}
+#connection-state:hover {
+  color: #08f;
 }
 
 #connection-state.changed {
@@ -239,7 +243,7 @@ iframe {
 
 
 #connection-modal {
-  z-index: 100;
+  z-index: 120;
   position: absolute;
   left: 50%;
   top: 50%;
@@ -277,6 +281,16 @@ iframe {
   cursor: pointer;
   transition: background .1s;
   color: #333;
+  position: relative;
+}
+
+#connection-modal label.current:before{
+  position: absolute;
+  left:0;
+  top:0;
+  height: 100%;
+  content: '';
+  border-left: 3px solid #08f
 }
 #connection-modal input[type=radio]{
   display:none;
@@ -286,6 +300,7 @@ iframe {
   background: #dee;
   color: #000
 }
+
 
 #connection-modal input {
   display: inline;
@@ -303,4 +318,17 @@ iframe {
   /*back*/
   outline: none;
   background: rgba(1,1,1,0.2)
+}
+
+#connection-overlay{
+  position: fixed;
+  background: rgba(255,255,255,0.8);
+  left:0;
+  top:0;
+  right:0;
+  bottom:0;
+  z-index: 110;
+}
+#connection-overlay.hidden {
+  display: none;
 }

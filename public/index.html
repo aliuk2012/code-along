@@ -22,13 +22,14 @@
       <!-- textarea -->
       <div id="error" style="display:none"></div>
 
-      <div id="connection-state" style="display:none">-</div>
+      <a id="connection-state" style="display:none">-</a>
     </div>
 
     <button id="toggle">
       <img src="icon-chevron.svg" />
     </button>
 
+    <div id="connection-overlay" class="hidden"></div>
     <form id="connection-modal" class="hidden">
       <label>
         <span>&larr;</span> connected</a>
@@ -64,41 +65,7 @@
     <script src="connect.js"></script>
 
     <script type="text/javascript">
-      function getSelection() {
 
-        var modal = document.getElementById('connection-modal')
-        var other_editor = document.getElementById('other-editor')
-
-        var connected =
-
-        return new Promise(function(resolve){
-
-          modal.className = ''
-
-          modal.children[0].addEventListener('click', function(e){
-            e.preventDefault()
-            resolve('connected')
-          }, false)
-          modal.children[1].addEventListener('click', function(e){
-            e.preventDefault()
-            resolve('independent')
-          })
-          modal.children[2].addEventListener('click', function(e){
-            e.preventDefault()
-
-            other_editor.focus()
-          })
-          modal.addEventListener('submit', function(e){
-            e.preventDefault()
-            resolve('other-' + other_editor.value)
-          })
-
-        })
-        .then(function(value){
-          modal.className = 'hidden'
-          return value
-        })
-      }
 
     </script>
 
