@@ -45,7 +45,7 @@
       var notifyAngle = function(angle) {
         if(angle === lastAngle) return
         else lastAngle = angle
-        
+
         fetch('/input', {
           credentials: 'same-origin',
           method: 'PUT',
@@ -67,7 +67,8 @@
         var body = JSON.stringify(json)
 
         return function(e){
-          e.preventDefault()
+          if(e.preventDefault)
+            e.preventDefault()
 
           this.className = state
 
@@ -154,6 +155,49 @@
         circle(rotation, '#08f')
       })
 
+      window.addEventListener('keydown', function(e){
+
+        switch (e.key) {
+          case 'ArrowRight':
+            rotation+=0.04
+            circle(rotation, '#f08')
+            break
+
+          case 'ArrowLeft':
+            rotation-=0.04
+            circle(rotation, '#f08')
+            break
+
+          case 'PageUp':
+            if(buttonA.className !== 'pressed')
+              handle('A', 'pressed').call(buttonA, e)
+            break
+
+          case 'PageDown':
+            if(buttonB.className !== 'pressed')
+              handle('B', 'pressed').call(buttonB, e)
+            break
+
+
+        }
+      })
+
+
+      window.addEventListener('keyup', function(e){
+
+        switch (e.key) {
+          case 'PageUp':
+            handle('A', 'released').call(buttonA, e)
+            break
+
+          case 'PageDown':
+            handle('B', 'released').call(buttonB, e)
+            break
+
+          default:
+
+        }
+      })
 
 
       function throttle(fn, threshhold, scope) {
