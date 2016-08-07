@@ -86,6 +86,7 @@ var store = (function (){
 
   function notify(user, key, value){
     target_iframe.contentWindow.postMessage({
+      fao:'store',
       user:user,
       key:key,
       value:value
@@ -94,6 +95,7 @@ var store = (function (){
 
   function notifyAll(){
     target_iframe.contentWindow.postMessage({
+      fao:'store',
       all:true
     }, '*')
   }

@@ -149,9 +149,9 @@ app.put('/input', parser, bodyParser.json(), (req, res) => {
   if(!req.session.auth) return res.sendStatus(401)
   res.sendStatus(200)
 
-  if(req.body.turn) {
-    redis.hset('input', 'turn', req.body.turn)
-    pusher.trigger('input','turn',req.body.turn)
+  if(req.body.dial) {
+    redis.hset('input', 'dial', req.body.dial)
+    pusher.trigger('input','dial',req.body.dial)
   }
   if(req.body.A) {
     redis.hset('input', 'a', req.body.A)

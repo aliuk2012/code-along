@@ -1,9 +1,10 @@
 var subscribers = []
 
 window.addEventListener('message', function(e){
-  subscribers.forEach(function(s){
-    s(e.data)
-  })
+  if(e.data.fao == 'store')
+    subscribers.forEach(function(s){
+      s(e.data)
+    })
 }, false)
 
 export function setItem(key, value) {

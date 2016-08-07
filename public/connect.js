@@ -263,3 +263,26 @@ if(user_connection.type == 'independent') {
     })
 
 }
+
+/*
+  Connect up inputs
+*/
+
+pusherClient
+  .then(function(client){
+    client.subscribe('input')
+      .bind('dial', handler('dial'))
+      .bind('a', handler('a'))
+      .bind('b', handler('b'))
+
+    function handler(input) {
+      return function(data){
+        target_iframe.contentWindow.postMessage({
+          fao:'messaging',
+          input: input,
+          value: data
+        }, '*')
+      }
+    }
+
+  })
