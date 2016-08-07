@@ -92,46 +92,54 @@ var pusherClient = fetch('/pusher/config')
 /*
   "login" to the channel & set up store
 */
-pusherClient.then(function(pusher){
+var userId = new Promise(function(resolve, reject){
+  pusherClient.then(function(pusher){
 
-  var presence = pusher.subscribe('presence-codealong')
-  presence.bind('pusher:subscription_succeeded', function(e){
+    var presence = pusher.subscribe('presence-codealong')
+    presence.bind('pusher:subscription_succeeded', function(e){
 
-    var element = document.getElementById('connection-state')
-    element.style.display = 'block'
-    element.className = user_connection.type;
-    element.innerText = ''+e.myID
+      var element = document.getElementById('connection-state')
+      element.style.display = 'block'
+      element.className = user_connection.type;
+      element.innerText = ''+e.myID
 
-    if(user_connection.type == 'connect')
-      element.innerText = e.myID + ' → ' + user_connection.target
+      if(user_connection.type == 'connect')
+        element.innerText = e.myID + ' → ' + user_connection.target
 
-    if(user_connection.type == 'master')
-      element.innerText = e.myID + ' (master)'
+      if(user_connection.type == 'master')
+        element.innerText = e.myID + ' (master)'
 
-    element.href = 'javascript:showConnectionDialog()'
+      element.href = 'javascript:showConnectionDialog()'
 
-    // store = remoteStore(pusher, e.myID)
+      // store = remoteStore(pusher, e.myID)
 
-    store.connect(
-      pusher,
-      e.myID,
-      '/store',
-      'codealong_store'
-    )
+      store.connect(
+        pusher,
+        e.myID,
+        '/store',
+        'codealong_store'
+      )
+
+      resolve(e.myID)
+    })
+
   })
 
 })
+
+// userId.then(function(d){console.log("user id", d)})
 
 
 
 // there are backend checks too
 var isMaster = user_connection.type == 'master'
 
+var publishing = isMaster || user_connection.type == 'independent'
 
 /*
   Listen for code updates
 */
-if(!isMaster) {
+if(!publishing) {
   // not if we're pushing out as the master
 
   pusherClient
@@ -161,26 +169,93 @@ if(isMaster) {
 
   console.log("Master!")
 
+
   populate
     .then(function(){
+      code.setValue('--')
 
-      code.on('change', debounce(function(){
+      userId
+        .then(function(id){
+          return fetch('/content')
+            .then(function(res){ return res.text()})
+            .then(function(text){
+              code.setValue(text)
+            })
+            .then(function(){
+              code.on('change', debounce(function(){
 
-        console.log("putting")
+                console.log("putting")
 
-        fetch('/content', {
-          credentials: 'same-origin',
-          method: 'PUT',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            value: code.getValue()
+                fetch('/content', {
+                  credentials: 'same-origin',
+                  method: 'PUT',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    value: code.getValue()
+                  })
+                })
+
+              },750))
+
+              function debounce(fn, millis, timer){
+                return function(){
+                  clearTimeout(timer)
+                  timer = setTimeout(fn,millis,arguments)
+                }
+              }
+
+            })
           })
+
+
+    })
+
+}
+
+
+
+if(user_connection.type == 'independent') {
+
+  console.log("Independent!")
+
+  populate
+    .then(function(){
+      code.setValue('//--')
+
+      userId
+        .then(function(id){
+
+          fetch('/content/' + id)
+            .then(function(res){ return res.text()})
+            .then(function(text){
+              code.setValue(text)
+
+              code.on('change', debounce(function(){
+
+                console.log("putting " + id)
+
+                fetch('/content/' + id, {
+                  credentials: 'same-origin',
+                  method: 'PUT',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    value: code.getValue()
+                  })
+                })
+
+              },750))
+
+            })
+
+
         })
 
-      },750))
 
       function debounce(fn, millis, timer){
         return function(){

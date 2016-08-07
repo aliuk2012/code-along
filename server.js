@@ -111,6 +111,40 @@ app.put('/content', parser, bodyParser.json(), (req, res) => {
 })
 
 
+app.put('/content/:key', parser, bodyParser.json(), (req, res) => {
+
+  const key = req.params.key
+
+  if(!key) return res.sendStatus(404)
+  if(key != req.session.pusher_user_id) return res.sendStatus(401)
+
+  if(req.body.value) {
+    redis.setex('content:' + key, 60*60*24, req.body.value)
+    .then(function(){
+      pusher.trigger('codealong_' + key, 'update', {
+        readOnly: readOnly,
+        body: req.body.value
+      })
+    })
+  }
+
+  res.send('ok')
+
+})
+
+
+app.get('/content/:key', (req, res) => {
+
+  // todo normalise
+  const key = req.params.key
+
+  redis.get('content:' + key)
+    .then(function(d, e){
+      res.send(d || "document.body.style.background = '#fc0'" )
+    })
+})
+
+
 app.put('/input', parser, bodyParser.json(), (req, res) => {
   if(!req.session.auth) return res.sendStatus(401)
   res.sendStatus(200)
