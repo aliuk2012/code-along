@@ -10,7 +10,6 @@ window.addEventListener('message', function(e){
 // subscribe to an input channel
 export function subscribe(input, callback) {
   subscribers.push(function(message){
-    // console.log(message.input, input)
     if(message.input == input)
       callback(message.value)
   })

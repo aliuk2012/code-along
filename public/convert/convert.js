@@ -4,7 +4,7 @@
 
 var modules = [
 
-  'draw', 'greeter', 'store', 'util', 'messaging'
+  'draw', 'greeter', 'store', 'util', 'messaging', 'audio'
 
 ].reduce(function(memo, item){
   memo[item] =

@@ -1,5 +1,10 @@
 ES6Promise.polyfill()
 
+
+// create a reusable audio context
+window.AudioContext = window.AudioContext || window.webkitAudioContext
+window.context = parent.context || new AudioContext()
+
 var htm = document.getElementsByTagName('html')[0]
 toggle.onclick = function(e){
   e.preventDefault()
