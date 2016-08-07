@@ -169,47 +169,33 @@ if(isMaster) {
 
   console.log("Master!")
 
-
   populate
     .then(function(){
-      code.setValue('--')
 
-      userId
-        .then(function(id){
-          return fetch('/content')
-            .then(function(res){ return res.text()})
-            .then(function(text){
-              code.setValue(text)
-            })
-            .then(function(){
-              code.on('change', debounce(function(){
+      code.on('change', debounce(function(){
 
-                console.log("putting")
+        console.log("putting (master)")
 
-                fetch('/content', {
-                  credentials: 'same-origin',
-                  method: 'PUT',
-                  headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    value: code.getValue()
-                  })
-                })
-
-              },750))
-
-              function debounce(fn, millis, timer){
-                return function(){
-                  clearTimeout(timer)
-                  timer = setTimeout(fn,millis,arguments)
-                }
-              }
-
-            })
+        fetch('/content', {
+          credentials: 'same-origin',
+          method: 'PUT',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            value: code.getValue()
           })
+        })
 
+      },750))
+
+      function debounce(fn, millis, timer){
+        return function(){
+          clearTimeout(timer)
+          timer = setTimeout(fn,millis,arguments)
+        }
+      }
 
     })
 
