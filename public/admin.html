@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Admin</title>
     <link rel="stylesheet" href="styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
 
@@ -38,12 +39,11 @@ document.body.innerText = document.getElementsByTagName('html')[0].outerHTML
 document.body.style.whiteSpace = 'pre'</code></pre>
 <button class="send">💥</button>
 
-
 <h3>Whoop!</h3>
 <pre><code>// data-uris
 const a = document.createElement('a')
 a.target = '_blank'
-a.href = 'data:text/html,<h1>Hello!'
+a.href = 'data:text/html,&lt;h1&gt;Hello!'
 a.innerText = 'hello?'
 
 document.body.appendChild(a)</code></pre>
@@ -52,7 +52,7 @@ document.body.appendChild(a)</code></pre>
 
 <h3>Whoop!</h3>
 <pre><code>// Blobs
-const blob = new Blob(['<h1>Hello!'], {type: 'text/html'})
+const blob = new Blob(['&lt;h1&gt;Hello!'], {type: 'text/html'})
 
 const a = document.createElement('a')
 a.target = '_blank'
