@@ -30,6 +30,83 @@
       <input id="editable" type="checkbox" name="editable" value="">
     </label> -->
 
+<h3>Whoop!</h3>
+<pre><code>document.body.style.background = 'aquamarine'
+// transcoding
+document.body.innerText = document.getElementsByTagName('html')[0].outerHTML
+
+document.body.style.whiteSpace = 'pre'</code></pre>
+<button class="send">💥</button>
+
+
+<h3>Whoop!</h3>
+<pre><code>// data-uris
+const a = document.createElement('a')
+a.target = '_blank'
+a.href = 'data:text/html,<h1>Hello!'
+a.innerText = 'hello?'
+
+document.body.appendChild(a)</code></pre>
+<button class="send">💥</button>
+
+
+<h3>Whoop!</h3>
+<pre><code>// Blobs
+const blob = new Blob(['<h1>Hello!'], {type: 'text/html'})
+
+const a = document.createElement('a')
+a.target = '_blank'
+a.href = URL.createObjectURL(blob)
+a.innerText = 'hello!!'
+
+document.body.appendChild(a)</code></pre>
+<button class="send">💥</button>
+
+
+
+<h3>Whoop!</h3>
+<pre><code>// JS2016
+
+document.currentScript.className = 'visible'
+
+const hey = (you) =>
+  console.log(`HELLO ${you}`)</code></pre>
+  <button class="send">💥</button>
+
+
+
+<h3>Whoop!</h3>
+<pre><code>// External Modules
+
+document.currentScript.className = 'visible'
+
+import {background} from 'util'
+
+background('#f08')</code></pre>
+<button class="send">💥</button>
+
+
+
+<h3>Whoop!</h3>
+<pre><code>// Code protect
+
+document.currentScript.className = 'visible'
+
+import {text} from 'util'
+
+for(var i = 99; i > 0; i++) {
+  console.log(`${i} bottles of beer`)
+}
+
+text('Hello')</code></pre>
+<button class="send">💥</button>
+
+
+
+
+
+
+
 <h3>My favourite colour</h3>
 <pre><code>document.body.style.background = 'aquamarine'</code></pre>
 <button class="send">💥</button>
