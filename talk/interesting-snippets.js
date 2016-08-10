@@ -155,24 +155,83 @@ source.onmessage = function(event) {
 // ws://echo.websocket.org/
 
 
-const url = 'wss://ws-eu.pusher.com/app/663fbc85a06feec56503?client=js&version=3.2&protocol=5'
+
+
+
+const source = new EventSource("/endpoint.php");
+
+source.onmessage = e => console.log(`message: ${e.data}`)
+
+/*
+:comment
+
+data: Hello
+
+:comment
+
+data: Hello
+data: World
+*/
+
+
+source.addEventListener('dial') = e => console.log(`Dial position: ${e.data}`)
+
+/*
+event: dial
+data: 54
+
+event: dial
+data: 108
+
+event: keypad
+data: f
+
+event: button-a
+data: pressed
+*/
+
+
+// also
+
+
+/*
+event: dial
+data: 54
+id: 0001
+
+event: dial
+data: 108
+id: 0002
+
+event: keypad
+data: f
+id: 0003
+
+event: button-a
+data: pressed
+id: 0004
+*/
+
+
+
+
+
+const url = "wss://echo.websocket.org"
+
 const socket = new WebSocket(url)
+socket.onopen = evt => console.log('open')
+socket.onclose = evt => console.log('close')
+socket.onmessage = evt => console.log(`message: ${evt.data}`)
+socket.onerror = evt => console.log('error')
 
-socket.onmessage = (event) => {
-  console.log(data)
-}
-
-websocket.send(JSON.stringify({
-  "event": "pusher:subscribe",
-  "data": {
-    "channel": "codealong_store"
-  }
-}))
+setTimeout(function(){
+  socket.send('HELLO')
+}, 1000)
 
 
 
 
-// connect to pusher raw-ly
+// pusher
 
 
 const url = 'wss://ws-eu.pusher.com/app/663fbc85a06feec56503?client=js&version=3.2&protocol=5'
@@ -192,7 +251,7 @@ socket.onopen = () => {
   socket.send(JSON.stringify({
     "event": "pusher:subscribe",
     "data": {
-      "channel": "turns"
+      "channel": "input"
     }
   }))
 

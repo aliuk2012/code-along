@@ -9,13 +9,24 @@
 
 ---
 
+![fit](images/pusher-push.png)
+
+---
+
 # [fit] I co-organise [@JSOxford](https://twitter.com/jsoxford)
 
 ![inline](images/jsoxford.png)
 
 ---
 
-# [fit] Surfing
+![fit](images/soh.png)
+
+---
+
+# I've not really said this stuff yet
+
+## 1. Tell me if we've been here too long
+## 2. I'd be happy (and sorry) if you tell me this is rubbish
 
 ---
 
@@ -23,36 +34,18 @@
 
 ---
 
-## Part 1
-# [fit] Live coding
+# [fit] ~~Live coding <br />across all <br />the things~~
 
 ---
 
-# Closing the feedback loop
-
-# change, save, __tab__, ftp, wait, __tab__, refresh
-
----
-
-# Closing the feedback loop
-
-# change, save, __tab__, refresh
+# [fit] How to build a
+# [fit] __collaborative__
+# [fit] *browser-based* editor
+### (and why)
 
 ---
 
-# Closing the feedback loop
-
-# change, save
-
----
-
-# Closing the feedback loop
-
-# change
-
----
-
-# [fit] Putting our editor in a browser
+# ⤷ Browser-based editors
 
 ---
 
@@ -62,75 +55,172 @@
 
 ---
 
-![fit inline](images/code-along.png)
+### side note - not just frontend
 
-# bit.ly/mdevaug
+![inline 40%](images/cloud9.png)![inline 40%](images/hyperdev.png)
+
+^ this can go further than js
+
+---
+
+![fit](images/code-along.png)
 
 
 ---
 
-# [fit] But, how?!
+
+# [fit] cojs.co
+
+![fit](images/code-along.png)
 
 ---
 
-# [fit] Hyper Text
+# 💥
 
-```html
-<textarea id="source"></textarea>
+---
 
-<iframe id="target"></iframe>
+# /
+
+---
+
+# / <br />⤷ The challenges
+
+---
+
+![fit](images/code-along-diagram.png)
+
+---
+
+# The challenges
+
+* Making a textarea feel nice
+* Showing content
+* Code transpilation
+* External modules
+* Not breaking things
+
+---
+
+# / <br />⤷ The challenges
+# Making a textarea feel nice
+
+![140% inline](images/textarea.png)
+
+---
+
+# [fit] Web based code editors
+
+## (maybe don't write one yourself)
+
+* Ace Editor
+* Monaco
+* CodeMirror
+* ~Atom~
+
+^ Atom is interesting
+
+---
+
+![fit](images/codemirror.png)
+
+---
+
+# [fit] Integration with our textarea
+
+```js
+CodeMirror.fromTextArea(source)
 ```
 
+^ hooks in the change events transparently
+
 ---
 
-# [fit] #target contents
+# …tonnes more stuff
+
+
+---
+
+# / <br />⤷ The challenges
+# Showing content
 
 ```html
-<body><script>
-{OUR JAVASCRIPT}
-</script></body>
+<iframe id="target" href="/mypage"></iframe>
 ```
+
+## (normal answer: host it somewhere)
+
+# [fit] <br/><br/> 💥
+
+---
+
+## Option 1.
+
+----
+
+# "Upload" to ServiceWorker
+
+## [fit] Web page → Service Worker → Network
 
 
 ---
 
-# [fit] But, how…
-# …do we populate an iframe?!
+# hmmmmm
 
+* trendy
+* cool
+* persistant urls
+* overkill possibly
+* support is … _positive?_
+* really cool
+
+---
+
+## Option 2.
 
 ---
 
 # [fit] Data URIs
 
+---
+
 # [fit] data:[<mediatype>][;base64],<data>
 
+---
+
 # [fit] data:text/html,<h1>Hello!
+
+# 💥
 
 ---
 
 ```js
-source.onkeyup = function() {
-  target.src = 'data:text/html;charset=utf-8,'+
-               '%3Cbody%3E%3Cscript%3E' +
-               encodeURI(source.value) +
-               '%3C/script%3E'
-}
+iframe.src = 'data:text/html;charset=utf-8,'+
+             '%3Cbody%3E%3Cscript%3E' +
+             encodeURI(source.value) +
+             '%3C/script%3E'
 ```
 
+
 ---
+
 
 # hmmm
 
 * lack of error handling
 * length limitations
 * random encoding issues
-* restrictions
+* restrictions…
 
-![inline left](images/btoa.png)
 
 ---
 
-alternatively
+![fit](images/btoa.png)
+
+---
+
+## Option 3.
+
+---
 
 # [fit] Blobs
 
@@ -156,16 +246,18 @@ url = URL.createObjectURL(b)
 URL.revokeObjectURL(url)
 ```
 
+# 💥
+
 ---
 
 
 ```js
-source.onkeyup = function() {
-  var blob = generate(source.value)
-  URL.revokeObjectURL(target.src)
 
-  target.src = URL.createObjectURL(blob)
-}
+var blob = generate(source.value)
+URL.revokeObjectURL(target.src)
+
+iframe.src = URL.createObjectURL(blob)
+
 ```
 
 ---
@@ -176,109 +268,14 @@ source.onkeyup = function() {
 * safe, and lots of control
 * sounds cool
 
-…
-
-* Object URLs are transient
 
 ---
 
-or, maybe
-
-# [fit] Service <br />Workers
-
----
-
-```js
-serviceWorker.register('worker-script.js')
-```
+# / <br />⤷ The challenges
+# Code transpilation
 
 ---
 
-```js
-// worker-script.js
-self.addEventListener('fetch', event =>
-  event.respondWith(
-    caches.match(event.request)
-      .then(response =>
-        response || fetch(event.request)
-      )
-    )
-  )
-```
-
----
-
-```js
-const response = new Response(myBlob, {
-    headers: {'Content-Type': 'text/html'}
-  })
-
-caches.open('whatever')
-  .then(cache =>
-    cache.put('/sw-url', response)
-  )
-```
-
----
-
-
-```html
-<iframe src="/sw-url"></iframe>
-```
-
----
-
-# [fit] / Showing content
-
----
-
-# [fit] UI
-
----
-
-![140%](images/textarea.png)
-
----
-
-# [fit] Web based code editors
-
-## (maybe don't write one yourself)
-
-* Ace Editor
-* Monaco
-* CodeMirror
-
-^ Atom is interesting
-
----
-
-![fit](images/codemirror.png)
-
----
-
-# [fit] Integration with our textarea
-
-```js
-CodeMirror.fromTextArea(source)
-```
-
-^ hooks in the change events transparently
-
----
-
-# …tonnes more stuff
-
----
-
-# [fit] /UI
-
----
-
-# [fit] JavaScript
-
-## It's not like it used to be
-
----
 
 # ES2015
 
@@ -286,6 +283,10 @@ CodeMirror.fromTextArea(source)
 const hey = (you) =>
   console.log(`HELLO ${you}`)
 ```
+
+# 💥
+
+
 ---
 
 ## [fit] Tracuer
@@ -323,13 +324,14 @@ All pretty cool, though personally
 buble.transform(source.value).code
 ```
 
----
-
-# [fit] …JavaScript
-
-## There's more of it than there used to be
 
 ---
+
+# / <br />⤷ The challenges
+# External modules
+
+---
+
 
 ```js
 // commonjs
@@ -341,6 +343,13 @@ utils.say('yeah!')
 import {say} from 'utils'
 say('yeah!')
 ```
+
+
+---
+
+# bundling
+
+# 💥
 
 ---
 
@@ -372,7 +381,7 @@ All pretty cool, though…
 * minimal code-rewriting
 * tree shaking
 * d3, THREE.js
-* You're the best, Rich Harris
+* Seriously, Rich Harris you're the best
 
 
 ---
@@ -396,14 +405,13 @@ rollup.rollup({
 )
 ```
 
+---
+
+# / <br />⤷ The challenges
+# Not breaking things
 
 ---
 
-# [fit] JavaScript…
-
-## Sometimes your JavaScript can break things
-
----
 
 ```js
 for(var i = 99; i > 0; i++) {
@@ -414,7 +422,7 @@ for(var i = 99; i > 0; i++) {
 ---
 
 # [fit] jsbin/loop-protect
-## Major props, Remy Sharp
+## Super props, Remy Sharp
 
 ```js
 loopProtect(`for(var i = 99; i > 0; i++) {
@@ -432,29 +440,60 @@ for(var i = 99; i > 0; i++) {
 }
 ```
 
-
-
-
+# 💥
 
 ---
 
-# [fit] /Java<br/>Script
+# /
 
 ---
 
-
-![fit](images/demo.png)
-
+# / <br />⤷ Why
 
 ---
 
-## Part 2
-# [fit] across all <br/>the things
+# Closing the loop
 
 ---
 
-## Why I built code-along
-### Experimenting with multi-device coding
+# Closing the loop
+
+# change, save, __tab__, ftp, wait, __tab__, refresh
+
+### Uploading stuff to a server
+
+---
+
+# Closing the loop
+
+# change, save, __tab__, refresh
+
+### Local development
+
+---
+
+# Closing the loop
+
+# change, save
+
+### Live reload+
+
+---
+
+# Closing the loop
+
+# change
+
+### In place editing
+
+---
+
+## This is a good thing
+
+---
+
+# / <br />⤷ Why
+# Multi Device Development Experiments
 
 ---
 
@@ -488,14 +527,41 @@ for(var i = 99; i > 0; i++) {
 
 
 ## /3
-# [fit] Talking stick <br/>Collaboration
+# [fit] Social inspired development
+
+<!--![right](images/emf.jpg)-->
 
 ---
 
-…
+# /
 
 ---
 
-# Thanks for listening
+# / demo?
+## let's build a "musical instrument"
 
-# [fit] @benjaminbenben
+<!--
+---
+
+# Playing pictionary
+
+# Code should read like an essay
+
+# Naming is hard
+
+![right](images/pictionary.jpg)
+
+-->
+
+---
+
+# People & user experience are the difficult things
+
+## (so let's focus on them)
+
+---
+
+# Thank you,
+
+# [fit] I'm @benjaminbenben
+## (also, right here)
