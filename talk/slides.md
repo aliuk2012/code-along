@@ -13,6 +13,10 @@
 
 ---
 
+![](images/hb.jpg)
+
+---
+
 # [fit] I co-organise [@JSOxford](https://twitter.com/jsoxford)
 
 ![inline](images/jsoxford.png)
@@ -23,18 +27,10 @@
 
 ---
 
-# I've not really said this stuff yet
+# I've not really said this stuff much yet
 
-## 1. Tell me if we've been here too long
-## 2. I'd be happy (and sorry) if you tell me this is rubbish
-
----
-
-# [fit] Live coding <br />across all <br />the things
-
----
-
-# [fit] ~~Live coding <br />across all <br />the things~~
+## 1. Let me know if I'm taking too long
+## 2. I'd be happy (and sorry) to hear how this is rubbish
 
 ---
 
@@ -55,7 +51,7 @@
 
 ---
 
-### side note - not just frontend
+### (not just javascript)
 
 ![inline 40%](images/cloud9.png)![inline 40%](images/hyperdev.png)
 
@@ -75,7 +71,7 @@
 
 ---
 
-# 💥
+# 📲
 
 ---
 
@@ -115,7 +111,7 @@
 * Ace Editor
 * Monaco
 * CodeMirror
-* ~Atom~
+* ~~Atom~~
 
 ^ Atom is interesting
 
@@ -149,7 +145,7 @@ CodeMirror.fromTextArea(source)
 
 ## (normal answer: host it somewhere)
 
-# [fit] <br/><br/> 💥
+# [fit] <br/><br/> 📲
 
 ---
 
@@ -189,7 +185,7 @@ CodeMirror.fromTextArea(source)
 
 # [fit] data:text/html,<h1>Hello!
 
-# 💥
+# 📲
 
 ---
 
@@ -246,7 +242,7 @@ url = URL.createObjectURL(b)
 URL.revokeObjectURL(url)
 ```
 
-# 💥
+# 📲
 
 ---
 
@@ -284,7 +280,7 @@ const hey = (you) =>
   console.log(`HELLO ${you}`)
 ```
 
-# 💥
+# 📲
 
 
 ---
@@ -311,7 +307,8 @@ All pretty cool, though personally
 
 * inspired by Babel
 * no shims / polyfills
-* compact transforms only
+* simple transforms only
+* …(no async/await)
 * less extensibility
 * fast
 * Nice one, Rich Harris
@@ -349,7 +346,7 @@ say('yeah!')
 
 # bundling
 
-# 💥
+# 📲
 
 ---
 
@@ -440,7 +437,7 @@ for(var i = 99; i > 0; i++) {
 }
 ```
 
-# 💥
+# 📲
 
 ---
 
@@ -514,22 +511,33 @@ for(var i = 99; i > 0; i++) {
 ---
 
 
-## /2.1 (Broadcast)
+## /2.1 Broadcast
 # [fit] For development
 
+
+![right](images/mdd-dev.jpg)
+
 ---
 
 
-## /2.2 (Broadcast)
+## /2.2 Broadcast
 # [fit] For talk-workshops
 
+
+![right](images/mdd-dev2.jpg)
+
 ---
 
-
 ## /3
-# [fit] Social inspired development
+# [fit] Social coding models
 
-<!--![right](images/emf.jpg)-->
+---
+
+![fit](images/social.png)
+
+---
+
+![](images/soh.jpg)
 
 ---
 
@@ -555,9 +563,28 @@ for(var i = 99; i > 0; i++) {
 
 ---
 
-# People & user experience are the difficult things
+…
 
-## (so let's focus on them)
+---
+
+# Stuff is generally possible
+
+---
+
+
+# Stuff is generally possible
+
+## UX (people) can be a challenge
+
+
+---
+
+
+# Stuff is generally possible
+
+## UX (people) can be a challenge
+
+## focus on the challenge
 
 ---
 
