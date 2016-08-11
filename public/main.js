@@ -5,6 +5,21 @@ ES6Promise.polyfill()
 window.AudioContext = window.AudioContext || window.webkitAudioContext
 window.context = parent.context || new AudioContext()
 
+
+// iOS hack (untested)
+;(function(element, context, event){
+  element.addEventListener(event, handler)
+  function handler(){
+    context.resume()
+    setTimeout(function () {
+      if (context.state === 'running') {
+        element.removeEventListener(event, handler, false)
+      }
+    }, 0)
+  }
+})(document.body, window.context, 'touchend')
+
+
 var htm = document.getElementsByTagName('html')[0]
 toggle.onclick = function(e){
   e.preventDefault()
