@@ -34,7 +34,6 @@
 
 <h3>Clear / Aquamarine</h3>
 <pre><code>document.body.style.background = 'aquamarine'</code></pre>
-<button class="send">💥</button>
 
 
 <h3>Transcoding</h3>
@@ -43,7 +42,6 @@
 document.body.innerText = document.getElementsByTagName('html')[0].outerHTML
 
 document.body.style.whiteSpace = 'pre'</code></pre>
-<button class="send">💥</button>
 
 <h3>Data URIs</h3>
 <pre><code>display_link('data:text/html,&lt;h1&gt;Hello!')
@@ -58,7 +56,6 @@ function display_link(url){
   document.body.appendChild(a)
 }
 </code></pre>
-<button class="send">💥</button>
 
 
 <h3>Blob URIs</h3>
@@ -80,7 +77,6 @@ function display_link(url){
   document.body.appendChild(a)
 }
 </code></pre>
-<button class="send">💥</button>
 
 
 
@@ -90,7 +86,7 @@ function display_link(url){
 const hello = (name) => `Hello, ${name}!!`
 
 console.log(hello("Digital Croydon"))</code></pre>
-  <button class="send">💥</button>
+
 
 
 
@@ -100,7 +96,6 @@ console.log(hello("Digital Croydon"))</code></pre>
 import {background} from 'util'
 
 background('#08f')</code></pre>
-<button class="send">💥</button>
 
 
 
@@ -114,7 +109,6 @@ for(var i = 99; i > 0; i++) {
 }
 
 text('Hello')</code></pre>
-<button class="send">💥</button>
 
 
 
@@ -124,7 +118,6 @@ text('Hello')</code></pre>
 
 <h3>My favourite colour</h3>
 <pre><code>document.body.style.background = 'aquamarine'</code></pre>
-<button class="send">💥</button>
 
 
 <h3>An editor part 1</h3>
@@ -136,7 +129,6 @@ document.body.appendChild(target)
 
 document.body.style.margin = '4em'
 </code></pre>
-<button class="send">💥</button>
 
 <h3>An editor part 2</h3>
 <pre><code>var source = document.createElement('textarea')
@@ -154,7 +146,6 @@ source.onkeyup = function(){
     '%3C/script%3E'
 }
 </code></pre>
-<button class="send">💥</button>
 
 
 <h3>Slow Disco disco</h3>
@@ -171,7 +162,6 @@ setInterval(function(){
   document.body.style.background =
     c(Math.random())
 }, 700)</code></pre>
-<button class="send">💥</button>
 
 
 <h3>colour fn</h3>
@@ -179,7 +169,6 @@ setInterval(function(){
   `hsl(${h * 360}, 50%, 50%)`
 
 document.body.style.background = c(Math.random())</code></pre>
-<button class="send">💥</button>
 
 
 <style media="screen">
@@ -225,7 +214,18 @@ document.body.style.background = c(Math.random())</code></pre>
     })
   }
 
-  [].forEach.call(document.querySelectorAll('.send'),function(element){
+  // generate some buttons
+  ;[].map.call(document.querySelectorAll('pre code'), function(element){
+    var button = document.createElement('button')
+    button.innerText = "💥"
+    button.className = 'send'
+
+    // append this after the pre (parent) node
+    element.parentNode.parentNode.insertBefore(button, element.parentNode.nextSibling)
+    return button
+  })
+  .forEach(function(element){
+
     element.addEventListener('click', function(){
       console.log("click", this)
 
