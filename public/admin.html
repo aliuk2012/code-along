@@ -31,66 +31,81 @@
       <input id="editable" type="checkbox" name="editable" value="">
     </label> -->
 
-<h3>Whoop!</h3>
-<pre><code>document.body.style.background = 'aquamarine'
-// transcoding
+
+<h3>Clear / Aquamarine</h3>
+<pre><code>document.body.style.background = 'aquamarine'</code></pre>
+<button class="send">💥</button>
+
+
+<h3>Transcoding</h3>
+<p>Display the generated content</p>
+<pre><code>/* Show generated content in body */
 document.body.innerText = document.getElementsByTagName('html')[0].outerHTML
 
 document.body.style.whiteSpace = 'pre'</code></pre>
 <button class="send">💥</button>
 
-<h3>Whoop!</h3>
-<pre><code>// data-uris
-const a = document.createElement('a')
-a.target = '_blank'
-a.href = 'data:text/html,&lt;h1&gt;Hello!'
-a.innerText = 'hello?'
+<h3>Data URIs</h3>
+<pre><code>display_link('data:text/html,&lt;h1&gt;Hello!')
 
-document.body.appendChild(a)</code></pre>
+
+// helper function
+function display_link(url){
+  const a = document.createElement('a')
+  a.href = a.innerText = url
+  a.target = '_blank'
+  a.className = 'dev_link'
+  document.body.appendChild(a)
+}
+</code></pre>
 <button class="send">💥</button>
 
 
-<h3>Whoop!</h3>
-<pre><code>// Blobs
+<h3>Blob URIs</h3>
+<pre><code>
 const blob = new Blob(['&lt;h1&gt;Hello!'], {type: 'text/html'})
+const blob_url = URL.createObjectURL(blob)
 
-const a = document.createElement('a')
-a.target = '_blank'
-a.href = URL.createObjectURL(blob)
-a.innerText = 'hello!!'
+display_link(blob_url)
 
-document.body.appendChild(a)</code></pre>
+
+display_link('data:text/html,&lt;h1&gt;Hello!')
+
+// helper function
+function display_link(url){
+  const a = document.createElement('a')
+  a.href = a.innerText = url
+  a.target = '_blank'
+  a.className = 'dev_link'
+  document.body.appendChild(a)
+}
+</code></pre>
 <button class="send">💥</button>
 
 
 
-<h3>Whoop!</h3>
-<pre><code>// JS2016
+<h3>ES2015 transpilation</h3>
+<pre><code>document.currentScript.className = 'visible'
 
-document.currentScript.className = 'visible'
+const hello = (name) => `Hello, ${name}!!`
 
-const hey = (you) =>
-  console.log(`HELLO ${you}`)</code></pre>
+console.log(hello("Digital Croydon"))</code></pre>
   <button class="send">💥</button>
 
 
 
-<h3>Whoop!</h3>
-<pre><code>// External Modules
-
-document.currentScript.className = 'visible'
+<h3>Module Loading</h3>
+<pre><code>document.currentScript.className = 'visible'
 
 import {background} from 'util'
 
-background('#f08')</code></pre>
+background('#08f')</code></pre>
 <button class="send">💥</button>
 
 
 
-<h3>Whoop!</h3>
-<pre><code>// Code protect
-
-document.currentScript.className = 'visible'
+<h3>Code protect</h3>
+<pre><code>document.currentScript.className = 'visible'
 
 import {text} from 'util'
 
