@@ -30,7 +30,7 @@
 # I've not really said this stuff much yet
 
 ## 1. Let me know if I'm taking too long
-## 2. I'd be happy (and sorry) to hear how this is rubbish
+## 2. I'd be happy (and sorry) to hear that things are rubbish
 
 ---
 
@@ -473,7 +473,7 @@ for(var i = 99; i > 0; i++) {
 
 # change, save
 
-### Live reload+
+### Live reload, browser sync, figwheel
 
 ---
 
