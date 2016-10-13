@@ -286,3 +286,26 @@ pusherClient
     }
 
   })
+//
+//
+// window.shareChannel = pusherClient
+//   .then(function(client){
+//
+//     var currentScriptHash;
+//
+//     return {
+//       subscribe: function(scriptHash, fnHash) {
+//         if(currentScriptHash !== scriptHash) {
+//           client.allChannels();
+//           console.group('Pusher - subscribed to:');
+//           for (var i = 0; i < channels.length; i++) {
+//               var channel = channels[i];
+//               console.log(channel.name);
+//           }
+//         }
+//       },
+//       trigger: function(c, arguments) {
+//
+//       }
+//     }
+//   })
