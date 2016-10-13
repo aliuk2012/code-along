@@ -145,6 +145,78 @@ app.get('/content/:key', (req, res) => {
 })
 
 
+// API route
+
+const crypto = require('crypto')
+
+app.get('/api/details', (req, res) => {
+  const key = req.session.pusher_user_id
+
+  if(!key)
+    return res.sendStatus(401)
+
+  getset('api:' + key, _ => crypto.randomBytes(32).toString('hex'))
+    .then(token => {
+      res.send({
+        key: key,
+        token: token
+      })
+    })
+
+})
+
+app.put('/api/content', parser, bodyParser.json(), (req, res) => {
+
+  // res.send("erm")
+
+  const key = req.body.key
+
+  if(!key) return res.sendStatus(404)
+  // if(key != req.session.pusher_user_id) return res.sendStatus(401)
+
+  redis.get('api:' + key)
+    .then(token => {
+      if(!token)
+        return res.sendStatus(404)
+
+      if(token!=req.body.token)
+        return res.sendStatus(401)
+
+      if(req.body.value) {
+        redis.setex('content:' + key, 60*60*24, req.body.value)
+        .then(function(){
+          pusher.trigger('codealong_' + key, 'update', {
+            readOnly: readOnly,
+            body: req.body.value
+          })
+        })
+      }
+
+      res.send("ok")
+
+    })
+
+
+})
+
+function getset(key, generate) {
+  return redis.get(key)
+    .then(response => {
+      if(response)
+        return response
+
+      var value = generate()
+      return redis.set(key, value)
+        .then(_ => value)
+    })
+}
+
+
+
+
+
+
+
 app.put('/input', parser, bodyParser.json(), (req, res) => {
   if(!req.session.auth) return res.sendStatus(401)
   res.sendStatus(200)
