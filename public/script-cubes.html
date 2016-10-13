@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Cubes</title>
+    <style media="screen">
+      body {font-family: monospace}
+      script[type='text/js-nope'] {
+        white-space: pre;
+        display: block;
+        border-left: 3px solid #000;
+        margin: 2em 1em;
+        transition: .2s;
+        cursor: pointer;
+        padding: .5em 1em;
+      }
+      script[type='text/js-nope']:hover {
+        border-color: aquamarine;
+      }
+      .selected {
+        background: aquamarine
+      }
+    </style>
+  </head>
+  <body>
+
+<h1>Cubes</h1>
+
+<label>
+  id
+  <input id="key" data-persist>
+</label>
+
+<label>
+  token
+  <input id="token" type="password" data-persist>
+</label>
+
+<hr />
+
+<script type="text/js-nope">
+console.log("YES")
+</script>
+
+<h2>More hellos</h2>
+
+<script type="text/js-nope">
+console.log("Hello")
+console.log("Hello")
+console.log("Hello")
+</script>
+
+<script type="text/javascript">
+
+  // key / token persistance
+  elements('[data-persist]')
+    .forEach( el => {
+      el.value = localStorage.getItem(el.id) || ''
+
+      on(el, 'change keyup', e => {
+        localStorage.setItem(el.id, el.value)
+      })
+    })
+
+
+
+  var steps = elements('[type="text/js-nope"]')
+
+  steps.forEach( step => {
+    // trim leading & trailing text
+    step.innerText = step.innerText.trim()
+
+    // respond to clicks
+    on(step, 'click', e => {
+      steps.forEach( s => s.classList.remove('selected'))
+      step.classList.add('selected')
+
+      console.log("SUBMIT", step.innerText)
+
+
+      fetch('/api/content', {
+        credentials: 'same-origin',
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          key: localStorage.getItem('key'),
+          token: localStorage.getItem('token'),
+          value: step.innerText
+        })
+      })
+
+    })
+
+  })
+
+
+
+
+
+
+
+  // helpers
+  function elements(qs){
+    return Array.from(document.querySelectorAll(qs))
+  }
+  function on(el, events, handler) {
+    events.split(' ').forEach(event => {
+      el.addEventListener(event, handler, false)
+    })
+  }
+
+
+
+</script>
+
+  </body>
+</html>
