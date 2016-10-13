@@ -20,6 +20,11 @@
       .selected {
         background: aquamarine
       }
+      h1, h2, h3, h4, h5 {
+        font-family: sans-serif;
+        /*color: #888;*/
+        font-weight: 100
+      }
     </style>
   </head>
   <body>
@@ -38,17 +43,949 @@
 
 <hr />
 
-<script type="text/js-nope">
-console.log("YES")
-</script>
-
-<h2>More hellos</h2>
+<h2>We'll start with some points</h2>
 
 <script type="text/js-nope">
-console.log("Hello")
-console.log("Hello")
-console.log("Hello")
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+]
 </script>
+
+<h2>We want to take each of these points ant draw them</h2>
+
+<script type="text/js-nope">
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+]
+
+points
+  .forEach(drawPoint)
+</script>
+
+<h2>Implement our draw function</h2>
+
+<script type="text/js-nope">
+const drawPoint = p => ctx.fillRect(p[0]-2, p[1]-2, 4, 4)
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+]
+
+points
+  .forEach(drawPoint)
+</script>
+
+
+<h2>Create a canvas to draw them to</h2>
+
+<script type="text/js-nope">
+const canvas = document.createElement('canvas')
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+document.body.appendChild(canvas)
+
+const ctx = canvas.getContext('2d')
+ctx.translate(canvas.width/2,canvas.height/2)
+
+const drawPoint = p => ctx.fillRect(p[0]-2, p[1]-2, 4, 4)
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+]
+
+points
+  .forEach(drawPoint)
+</script>
+
+
+
+
+<h2>Handle Resolution issues</h2>
+
+<script type="text/js-nope">
+const ratio = window.devicePixelRatio || 1
+const canvas = document.createElement('canvas')
+const w = canvas.width = window.innerWidth * ratio
+const h = canvas.height = window.innerHeight * ratio
+
+canvas.style.width = `${window.innerWidth}px`
+canvas.style.height = `${window.innerHeight}px`
+document.body.appendChild(canvas)
+
+const ctx = canvas.getContext('2d')
+ctx.translate(~~(w/2),~~(h/2))
+ctx.scale(ratio,ratio)
+
+const drawPoint = p => ctx.fillRect(p[0]-2, p[1]-2, 4, 4)
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+]
+
+points
+  .forEach(drawPoint)
+</script>
+
+<h2>Let's take this out to a module</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+
+const drawPoint = p => ctx.fillRect(p[0]-2, p[1]-2, 4, 4)
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+]
+
+points
+  .forEach(drawPoint)
+</script>
+
+
+
+<h2>Use Vectors</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+points
+  .forEach(drawPoint)
+
+</script>
+
+
+<h2>Transform Matrix</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+points
+  .map(p => scale(3).multiply(p))
+  .forEach(drawPoint)
+</script>
+
+
+<h2>Rotate</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+points
+  .map(p => scale(3).multiply(p))
+  .map(p => rotate(Math.PI/4).multiply(p))
+  .forEach(drawPoint)
+</script>
+
+
+<h2>Add some animation</h2>
+
+<script type="text/js-nope">
+import {ctx, clear} from 'canvas'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+const loop = fn => {
+  const wrapped = t => {
+    requestAnimationFrame(wrapped)
+    clear()
+    fn(t)
+  }
+  requestAnimationFrame(wrapped)
+}
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+
+loop( time => {
+  points
+    .map(p => scale(3).multiply(p))
+    .map(p => rotate(time/1000).multiply(p))
+    .forEach(drawPoint)
+})
+</script>
+
+
+<h2>Extract loop to helpers</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+
+loop( time => {
+  points
+    .map(p => scale(3).multiply(p))
+    .map(p => rotate(time/1000).multiply(p))
+    .forEach(drawPoint)
+})
+</script>
+
+
+<h2>Bring out transforms</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+
+loop( time => {
+  const s = scale(3)
+  const r = rotate(time/1000)
+
+  points
+    .map(p => s.multiply(p))
+    .map(p => r.multiply(p))
+    .forEach(drawPoint)
+})
+</script>
+
+
+<h2>mulitply matrices together</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+
+loop( time => {
+  const t = scale(3).multiply(rotate(time/1000))
+
+  points
+    .map(p => t.multiply(p))
+    .forEach(drawPoint)
+})
+</script>
+
+
+
+<h2>generate edges</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4] = points
+const edges = [[p1, p2], [p2, p3], [p3, p4], [p4, p1]]
+
+
+loop( time => {
+  const t = scale(3).multiply(rotate(time/1000))
+
+  points
+    .map(p => t.multiply(p))
+    .forEach(drawPoint)
+})
+</script>
+
+
+<h2>Implement Draw Edges</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawPoint = p => ctx.fillRect(p.e(1)-2, p.e(2)-2, 4, 4)
+
+const drawEdge = ([a,b]) => {
+  ctx.beginPath()
+  ctx.moveTo(a.e(1), a.e(2))
+  ctx.lineTo(b.e(1), b.e(2))
+  ctx.stroke()
+}
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4] = points
+const edges = [[p1, p2], [p2, p3], [p3, p4], [p4, p1]]
+
+
+loop( time => {
+  const t = scale(3).multiply(rotate(time/1000))
+
+  points
+    .map(p => t.multiply(p))
+    .forEach(drawPoint)
+
+  edges
+    .map(e => e.map(p => t.multiply(p)))
+    .forEach(drawEdge)
+})
+</script>
+
+
+
+<h2>Clean up points</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawEdge = ([a,b]) => {
+  ctx.beginPath()
+  ctx.moveTo(a.e(1), a.e(2))
+  ctx.lineTo(b.e(1), b.e(2))
+  ctx.stroke()
+}
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10],
+  [-10,+10],
+  [+10,+10],
+  [+10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4] = points
+const edges = [[p1, p2], [p2, p3], [p3, p4], [p4, p1]]
+
+
+loop( time => {
+  const t = scale(3).multiply(rotate(time/1000))
+
+  edges
+    .map(e => e.map(p => t.multiply(p)))
+    .forEach(drawEdge)
+})
+</script>
+
+
+<h2>3d points &amp; edges</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawEdge = ([a,b]) => {
+  ctx.beginPath()
+  ctx.moveTo(a.e(1), a.e(2))
+  ctx.lineTo(b.e(1), b.e(2))
+  ctx.stroke()
+}
+
+const scale = s => $M([
+  [s, 0],
+  [0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta)],
+  [Math.sin(theta), Math.cos(theta)],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10,+10],
+  [-10,+10,+10],
+  [+10,+10,+10],
+  [+10,-10,+10],
+
+  [-10,-10,-10],
+  [-10,+10,-10],
+  [+10,+10,-10],
+  [+10,-10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4, p5, p6, p7, p8] = points
+const edges = [
+  [p1, p2], [p2, p3], [p3, p4], [p4, p1],
+  [p5, p6], [p6, p7], [p7, p8], [p8, p5],
+  [p1, p5], [p2, p6], [p3, p7], [p4, p8]
+]
+
+
+loop( time => {
+  const t = scale(3).multiply(rotate(time/1000))
+
+  edges
+    .map(e => e.map(p => t.multiply(p)))
+    .forEach(drawEdge)
+})
+</script>
+
+
+
+<h2>update martrices</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawEdge = ([a,b]) => {
+  ctx.beginPath()
+  ctx.moveTo(a.e(1), a.e(2))
+  ctx.lineTo(b.e(1), b.e(2))
+  ctx.stroke()
+}
+
+const scale = s => $M([
+  [s, 0, 0],
+  [0, s, 0],
+  [0, 0, s]
+])
+
+const rotate = theta => $M([
+  [Math.cos(theta), -Math.sin(theta), 0],
+  [Math.sin(theta),  Math.cos(theta), 0],
+  [0,                0,               1],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10,+10],
+  [-10,+10,+10],
+  [+10,+10,+10],
+  [+10,-10,+10],
+
+  [-10,-10,-10],
+  [-10,+10,-10],
+  [+10,+10,-10],
+  [+10,-10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4, p5, p6, p7, p8] = points
+const edges = [
+  [p1, p2], [p2, p3], [p3, p4], [p4, p1],
+  [p5, p6], [p6, p7], [p7, p8], [p8, p5],
+  [p1, p5], [p2, p6], [p3, p7], [p4, p8]
+]
+
+
+loop( time => {
+  const t = scale(3).multiply(rotate(time/1000))
+
+  edges
+    .map(e => e.map(p => t.multiply(p)))
+    .forEach(drawEdge)
+})
+</script>
+
+
+<h2>Other Matrices</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop} from 'helpers'
+
+const drawEdge = ([a,b]) => {
+  ctx.beginPath()
+  ctx.moveTo(a.e(1), a.e(2))
+  ctx.lineTo(b.e(1), b.e(2))
+  ctx.stroke()
+}
+
+const scale = s => $M([
+  [s, 0, 0],
+  [0, s, 0],
+  [0, 0, s]
+])
+
+const rotateX = theta => $M([
+  [1,                0,               0],
+  [0, Math.cos(theta), -Math.sin(theta)],
+  [0, Math.sin(theta),  Math.cos(theta)],
+])
+
+const rotateY = theta => $M([
+  [Math.cos(theta), 0, -Math.sin(theta)],
+  [0,               1,                0],
+  [Math.sin(theta), 0,  Math.cos(theta)],
+])
+
+const rotateZ = theta => $M([
+  [Math.cos(theta), -Math.sin(theta), 0],
+  [Math.sin(theta),  Math.cos(theta), 0],
+  [0,                0,               1],
+])
+
+/* * * * */
+
+const points = [
+  [-10,-10,+10],
+  [-10,+10,+10],
+  [+10,+10,+10],
+  [+10,-10,+10],
+
+  [-10,-10,-10],
+  [-10,+10,-10],
+  [+10,+10,-10],
+  [+10,-10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4, p5, p6, p7, p8] = points
+const edges = [
+  [p1, p2], [p2, p3], [p3, p4], [p4, p1],
+  [p5, p6], [p6, p7], [p7, p8], [p8, p5],
+  [p1, p5], [p2, p6], [p3, p7], [p4, p8]
+]
+
+
+loop( time => {
+  const t = scale(3).multiply(rotateZ(time/1000))
+
+  edges
+    .map(e => e.map(p => t.multiply(p)))
+    .forEach(drawEdge)
+})
+</script>
+
+
+<h2>Extract stuff</h2>
+
+<script type="text/js-nope">
+import {ctx} from 'canvas'
+import {loop, drawEdge, scale, rotateX, rotateY, rotateZ} from 'helpers'
+
+/* * * * */
+
+const points = [
+  [-10,-10,+10],
+  [-10,+10,+10],
+  [+10,+10,+10],
+  [+10,-10,+10],
+
+  [-10,-10,-10],
+  [-10,+10,-10],
+  [+10,+10,-10],
+  [+10,-10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4, p5, p6, p7, p8] = points
+const edges = [
+  [p1, p2], [p2, p3], [p3, p4], [p4, p1],
+  [p5, p6], [p6, p7], [p7, p8], [p8, p5],
+  [p1, p5], [p2, p6], [p3, p7], [p4, p8]
+]
+
+
+loop( time => {
+  const t = scale(3).multiply(rotateZ(time/1000))
+
+  edges
+    .map(e => e.map(p => t.multiply(p)))
+    .forEach(drawEdge)
+})
+</script>
+
+
+<h2>We're not using ctx anymore</h2>
+
+<script type="text/js-nope">
+import {loop, drawEdge, scale, rotateX, rotateY, rotateZ} from 'helpers'
+
+/* * * * */
+
+const points = [
+  [-10,-10,+10],
+  [-10,+10,+10],
+  [+10,+10,+10],
+  [+10,-10,+10],
+
+  [-10,-10,-10],
+  [-10,+10,-10],
+  [+10,+10,-10],
+  [+10,-10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4, p5, p6, p7, p8] = points
+const edges = [
+  [p1, p2], [p2, p3], [p3, p4], [p4, p1],
+  [p5, p6], [p6, p7], [p7, p8], [p8, p5],
+  [p1, p5], [p2, p6], [p3, p7], [p4, p8]
+]
+
+
+loop( time => {
+  const t = scale(3).multiply(rotateZ(time/1000))
+
+  edges
+    .map(e => e.map(p => t.multiply(p)))
+    .forEach(drawEdge)
+})
+</script>
+
+
+
+<h2>Use new matrices</h2>
+
+<script type="text/js-nope">
+import {loop, drawEdge, scale, rotateX, rotateY, rotateZ} from 'helpers'
+
+/* * * * */
+
+const points = [
+  [-10,-10,+10],
+  [-10,+10,+10],
+  [+10,+10,+10],
+  [+10,-10,+10],
+
+  [-10,-10,-10],
+  [-10,+10,-10],
+  [+10,+10,-10],
+  [+10,-10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4, p5, p6, p7, p8] = points
+const edges = [
+  [p1, p2], [p2, p3], [p3, p4], [p4, p1],
+  [p5, p6], [p6, p7], [p7, p8], [p8, p5],
+  [p1, p5], [p2, p6], [p3, p7], [p4, p8]
+]
+
+
+loop( time => {
+  const t = scale(3)
+    .multiply(rotateX(time/1000))
+    .multiply(rotateY(time/3000))
+    .multiply(rotateZ(time/7000))
+
+  edges
+    .map(e => e.map(p => t.multiply(p)))
+    .forEach(drawEdge)
+})
+</script>
+
+
+<h2>With perspective</h2>
+
+<script type="text/js-nope">
+import {loop, drawEdge, scale, rotateX, rotateY, rotateZ} from 'helpers'
+
+const pM = $M([
+  [1, 0, 0, 0],
+  [0, 1, 0, 0],
+  [0, 0, 1, 0],
+  [0, 0, 0.005,0.995]
+])
+
+const applyPerspective = v => {
+	const v4 = pM.x($V(v.elements.concat(1)))
+    return v4.x(v4.e(4))
+}
+
+/* * * * */
+
+const points = [
+  [-10,-10,+10],
+  [-10,+10,+10],
+  [+10,+10,+10],
+  [+10,-10,+10],
+
+  [-10,-10,-10],
+  [-10,+10,-10],
+  [+10,+10,-10],
+  [+10,-10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4, p5, p6, p7, p8] = points
+const edges = [
+  [p1, p2], [p2, p3], [p3, p4], [p4, p1],
+  [p5, p6], [p6, p7], [p7, p8], [p8, p5],
+  [p1, p5], [p2, p6], [p3, p7], [p4, p8]
+]
+
+
+loop( time => {
+  const t = scale(3)
+    .multiply(rotateX(time/1000))
+    .multiply(rotateY(time/3000))
+    .multiply(rotateZ(time/7000))
+
+  edges
+    .map(e => e.map(p => applyPerspective(t.multiply(p))))
+    .forEach(drawEdge)
+})
+</script>
+
+
+
+
+<h2>Eyes</h2>
+
+<script type="text/js-nope">
+import {ctx, w, h} from 'canvas'
+import {loop, drawEdge, scale, rotateX, rotateY, rotateZ} from 'helpers'
+
+const pM = $M([
+  [1, 0, 0, 0],
+  [0, 1, 0, 0],
+  [0, 0, 1, 0],
+  [0, 0, 0.005,0.995]
+
+])
+
+const applyPerspective = v => {
+  const v4 = pM.x($V(v.elements.concat(1)))
+  return v4.x(v4.e(4))
+}
+
+/* * * * */
+
+const points = [
+  [-10,-10,+10],
+  [-10,+10,+10],
+  [+10,+10,+10],
+  [+10,-10,+10],
+
+  [-10,-10,-10],
+  [-10,+10,-10],
+  [+10,+10,-10],
+  [+10,-10,-10]
+].map(v => $V(v))
+
+const [p1, p2, p3, p4, p5, p6, p7, p8] = points
+const edges = [
+  [p1, p2], [p2, p3], [p3, p4], [p4, p1],
+  [p5, p6], [p6, p7], [p7, p8], [p8, p5],
+  [p1, p5], [p2, p6], [p3, p7], [p4, p8]
+]
+
+
+loop( time => {
+  const t = scale(3)
+    .multiply(rotateX(time/1000))
+    .multiply(rotateY(time/3000))
+    .multiply(rotateZ(time/7000))
+
+  ;[{x: -w/4, r: -0.05},{x: w/4, r: 0.05}]
+  .forEach( render => {
+    ctx.save()
+    ctx.translate(render.x,0)
+
+    const tc = rotateY(render.r).x(t)
+
+    edges
+      .map(e => e.map(p => applyPerspective(tc.multiply(p))))
+      .forEach(drawEdge)
+
+    ctx.restore()
+  })
+
+})
+</script>
+
+
+<h2>_______</h2>
+
+<script type="text/js-nope">
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script type="text/javascript">
 
