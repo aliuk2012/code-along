@@ -3,7 +3,7 @@ document.body.appendChild(canvas)
 
 export const ctx = canvas.getContext('2d')
 
-const ratio = window.devicePixelRatio || 1
+export const ratio = window.devicePixelRatio || 1
 
 export const w = canvas.width = window.innerWidth * ratio
 export const h = canvas.height = window.innerHeight * ratio
