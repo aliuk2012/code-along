@@ -951,7 +951,7 @@ loop( time => {
     .multiply(rotateY(time/3000))
     .multiply(rotateZ(time/7000))
 
-  ;[{x: -w/4, r: -0.05},{x: w/4, r: 0.05}]
+  ;[{x: -100, r: -0.05},{x: 100, r: 0.05}]
   .forEach( render => {
     ctx.save()
     ctx.translate(render.x,0)
