@@ -76,7 +76,7 @@
 
       console.log = (function(original){
         return function(){
-          _append_log([].map.call(arguments, function(j){return JSON.stringify(j)}).join(', '))
+          _append_log([].map.call(arguments, function(j){return JSON.stringify(j).replace(/\\n/g,'\n')}).join(', '))
 
           original.apply(this, arguments)
         }
