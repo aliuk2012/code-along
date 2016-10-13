@@ -1,14 +1,10 @@
 import {clear, ctx} from 'canvas'
 
-// sync to parent window timing:
-// pro - would look cool reloading maintained
-// con - could be confusing for people who expect rAF
-
+// extended loop, with consistant timing and error catching
 const timingOffset = () =>
   window.performance && window.parent.performance ?
     parent.performance.now() - performance.now() :
     0
-
 
 export const loop = fn => {
   const off = timingOffset()
