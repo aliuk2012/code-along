@@ -22,14 +22,14 @@ if (app.get('env') === 'production') {
   app.set('trust proxy', 2)
   session_options.cookie.secure = true
 
-/*  app.use((req, res, next) => {
+  app.use((req, res, next) => {
     if (req.headers['x-forwarded-proto'] != 'https') {
       res.redirect('https://www.cojs.co' + req.url)
     } else {
       next()
     }
   })
-  */
+
 }
 
 
@@ -333,6 +333,5 @@ app.get('/store', limiter, (req, res) => {
   res.send(store.getSource())
 })
 
-app.get('/.well-known/acme-challenge/2Ihmf8yHfaw-q8AHan6tX9_Gz6W2JSjPE-Cn-sNU49g', (req, res) => res.send('2Ihmf8yHfaw-q8AHan6tX9_Gz6W2JSjPE-Cn-sNU49g.YrwmERb5B8tzJXXeqFFBS25ZCYDE_vgpeHG-1znUCXA'))
 
 app.listen(process.env.PORT || 5000)
