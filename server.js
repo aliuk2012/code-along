@@ -22,13 +22,14 @@ if (app.get('env') === 'production') {
   app.set('trust proxy', 2)
   session_options.cookie.secure = true
 
-  app.use((req, res, next) => {
+/*  app.use((req, res, next) => {
     if (req.headers['x-forwarded-proto'] != 'https') {
       res.redirect('https://www.cojs.co' + req.url)
     } else {
       next()
     }
   })
+  */
 }
 
 
