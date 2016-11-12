@@ -20,8 +20,10 @@
 
     <div id="code">
       <!-- textarea -->
-      <div id="error" style="display:none"></div>
-
+      <div id="foot">
+        <a id="file-state" href="javascript:showDialog('files')">main.js</a>
+        <div id="error" style="display:none"></div>
+      </div>
       <a id="connection-state" style="display:none">-</a>
     </div>
 
@@ -30,6 +32,17 @@
     </button>
 
     <div id="connection-overlay" class="hidden"></div>
+    <form id="file-list-modal" class="modal hidden">
+      <label class="item">
+        main.js
+      </label>
+      <!-- <label>
+        one.js <a href="#" class="rm">&times;</a>
+      </label>-->
+      <label>
+        <input type="text" name="filename" value="" placeholder="filename.js" />
+      </label>
+    </form>
     <form id="connection-modal" class="modal hidden">
       <label>
         <span>&larr;</span> connected</a>

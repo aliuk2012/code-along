@@ -120,15 +120,31 @@ button span {
   background: rgba(255, 0, 0, .5);
 }
 
-#error {
-  background: rgba(255,0,0, .8);
-  color: #fff;
-  padding: .5em;
+#foot {
   position: absolute;
   bottom:0;
   z-index: 100;
   max-width: 80%;
 }
+
+#file-state {
+  display: block;
+  padding: .5em;
+  text-decoration: none;
+  color: #000
+}
+#file-state:hover {
+  color: #08f
+}
+
+
+#error {
+  background: rgba(255,0,0, .8);
+  color: #fff;
+  padding: .5em;
+  z-index: 100;
+}
+
 
 /* positioning */
 #code {
@@ -337,4 +353,21 @@ iframe {
 }
 #connection-overlay.hidden {
   display: none;
+}
+
+a.rm {
+  float: right;
+  color: #ccc;
+  text-decoration: none;
+  background: rgba(255,255,255,0);
+  width: 1em;
+  text-align: center;
+  height: 1em;
+  border-radius: 50%;
+  transition: .2s
+}
+
+a.rm:hover{
+  background: red;
+  color: #fff
 }

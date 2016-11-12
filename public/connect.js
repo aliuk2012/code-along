@@ -30,12 +30,13 @@ var user_connection = (function(){
 
 var showDialog = (function setup(){
     var modal = document.getElementById('connection-modal')
+    var file_modal = document.getElementById('file-list-modal')
     var other_editor = document.getElementById('other-editor')
     var overlay = document.getElementById('connection-overlay')
 
     overlay.addEventListener('click', function(e){
       overlay.className = 'hidden'
-      modal.className = 'modal hidden'
+      file_modal.className = modal.className = 'modal hidden'
     })
 
     switch (user_connection.type) {
@@ -65,10 +66,16 @@ var showDialog = (function setup(){
       document.location = '/?connect=' + other_editor.value
     })
 
+    file_modal.children[0].className = 'current'
+
     return function(which){
       switch (which) {
         case 'connection':
           modal.className = 'modal'
+          overlay.className = ''
+          break;
+        case 'files':
+          file_modal.className = 'modal'
           overlay.className = ''
           break;
         default:
