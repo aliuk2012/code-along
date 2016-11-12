@@ -98,10 +98,6 @@
   <body>
     <div id="content"></div>
     <ul id="log"></ul>
-
-    <!--TEMPORARY - need to find a way to do this properly-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/sylvester/0.1.3/sylvester.min.js"></script>
-
-    <script id="injected">{{INJECT}}</script>
+    {{INJECT}}
   </body>
 </html>

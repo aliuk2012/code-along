@@ -13,6 +13,8 @@ var modules = [
   return memo
 }, {})
 
+var scriptRegex = /^\s*\/\/\+(https:\/\/\S*)$/gm
+
 function convert (source) {
 
   // IMPORTANT, loop protect must be loaded frontend too
@@ -38,8 +40,20 @@ function convert (source) {
     ]
   })
   .then(function(bundle){
-    return bundle.generate({
+
+    var code = bundle.generate({
       format: 'iife'
     }).code
+
+    // look for any external includes
+    var includes = '', match
+
+    while(match = scriptRegex.exec(code))
+      includes += '<script src="'+match[1]+'"></script>\n'
+
+    return includes + '<script id="injected">' +
+      code +
+      '</script>'
+
   })
 }
