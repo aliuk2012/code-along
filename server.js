@@ -13,6 +13,8 @@ const Store = require('connect-redis')(session)
 console.log(app.get('env'))
 
 const session_options = {
+  resave: false,
+  saveUninitialized: false,
   store: new Store({client: redis}),
   secret: process.env.SECRET || 'whatever',
   cookie: {}
