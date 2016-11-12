@@ -1,3 +1,45 @@
+function FileSet(){
+  this.store = [{name: 'main.js', body: ''}]
+  this.current = 0
+  this.listeners = []
+}
+FileSet.prototype.listen = function(fn) {
+  this.listeners.push(fn)
+  fn(this.store)
+}
+FileSet.prototype.notify = function(){
+  var store = this.store
+  this.listeners.forEach(function(l){
+    l(store)
+  })
+}
+FileSet.prototype.add = function (name) {
+  this.current = this.store.push({
+    name: name,
+    body: '// ' + name
+  }) - 1
+  this.notify()
+}
+FileSet.prototype.select = function (idx) {
+  this.current = idx
+  this.notify()
+}
+
+FileSet.prototype.rm = function (idx) {
+  if(idx <= this.current) this.current--
+
+  this.store.splice(idx, 1)
+
+  this.notify()
+}
+
+var files = new FileSet
+
+// files.add('one.js')
+// files.add('two.js')
+// files.add('three.js')
+
+
 var target_iframe = document.querySelector('iframe')
 
 var user_connection = (function(){
@@ -30,14 +72,19 @@ var user_connection = (function(){
 
 var showDialog = (function setup(){
     var modal = document.getElementById('connection-modal')
-    var file_modal = document.getElementById('file-list-modal')
     var other_editor = document.getElementById('other-editor')
+
+    var file_modal = document.getElementById('file-list-modal')
+    var file_name = document.getElementById('filename-input')
+
     var overlay = document.getElementById('connection-overlay')
 
-    overlay.addEventListener('click', function(e){
+    function hide_modals(){
       overlay.className = 'hidden'
       file_modal.className = modal.className = 'modal hidden'
-    })
+    }
+
+    overlay.addEventListener('click', hide_modals)
 
     switch (user_connection.type) {
       case 'default':
@@ -66,7 +113,56 @@ var showDialog = (function setup(){
       document.location = '/?connect=' + other_editor.value
     })
 
-    file_modal.children[0].className = 'current'
+
+    // File List
+
+    file_modal.addEventListener('submit', function(e){
+      e.preventDefault()
+      if(file_name.value) {
+        files.add(file_name.value)
+        file_name.value = ''
+        hide_modals()
+      }
+    })
+
+    var fileList = file_modal.children[0]
+
+    function updateList() {
+
+      fileList.innerHTML = ''
+
+      files.store.forEach(function(file, i){
+
+        var label = document.createElement('label')
+        label.innerText = file.name
+
+        if(files.current == i)
+         label.className = 'current'
+
+        label.addEventListener('click', function(e){
+          files.select(i)
+          hide_modals()
+        }, false)
+
+        if(i) {
+          var rm = document.createElement('a')
+          rm.className = 'rm'
+          rm.href = '#'
+          rm.innerHTML = '&times;'
+          rm.addEventListener('click', function(e){
+            e.preventDefault()
+            e.stopPropagation()
+            files.rm(i)
+            updateList()
+          }, false)
+
+          label.appendChild(rm)
+        }
+
+        fileList.appendChild(label)
+      })
+    }
+
 
     return function(which){
       switch (which) {
@@ -77,12 +173,20 @@ var showDialog = (function setup(){
         case 'files':
           file_modal.className = 'modal'
           overlay.className = ''
+          updateList()
           break;
         default:
           console.log("unkown dialog " + which)
       }
     }
 })()
+
+
+// hook up the file button
+files.listen(function(store){
+  document.getElementById('file-state')
+    .innerText = store[files.current].name
+})
 
 
 
