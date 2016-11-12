@@ -13,3 +13,10 @@ A tool for interactive "code-together" javascript workshops
 
 * Better name / url
 * Offline support
+
+## Architecture plan
+
+* support generic imports
+* Transition to dynamodb
+* jwt auth
+* cloudfront shell - lambda backend
