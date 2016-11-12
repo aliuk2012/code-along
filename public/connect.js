@@ -28,14 +28,14 @@ var user_connection = (function(){
   }
 })()
 
-
-var showConnectionDialog = (function setup(){
+var showDialog = (function setup(){
     var modal = document.getElementById('connection-modal')
     var other_editor = document.getElementById('other-editor')
     var overlay = document.getElementById('connection-overlay')
 
     overlay.addEventListener('click', function(e){
-      overlay.className = modal.className = 'hidden'
+      overlay.className = 'hidden'
+      modal.className = 'modal hidden'
     })
 
     switch (user_connection.type) {
@@ -65,8 +65,15 @@ var showConnectionDialog = (function setup(){
       document.location = '/?connect=' + other_editor.value
     })
 
-    return function showDialog(){
-      modal.className = overlay.className = ''
+    return function(which){
+      switch (which) {
+        case 'connection':
+          modal.className = 'modal'
+          overlay.className = ''
+          break;
+        default:
+          console.log("unkown dialog " + which)
+      }
     }
 })()
 
@@ -113,7 +120,7 @@ var userId = new Promise(function(resolve, reject){
       if(user_connection.type == 'master')
         element.innerText = e.myID + ' (master)'
 
-      element.href = 'javascript:showConnectionDialog()'
+      element.href = 'javascript:showDialog("connection")'
 
       // store = remoteStore(pusher, e.myID)
 
