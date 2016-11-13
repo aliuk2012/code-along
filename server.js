@@ -168,6 +168,20 @@ app.get('/api/details', (req, res) => {
 
 })
 
+app.get('/api/check', parser, bodyParser.json(), (req, res) => {
+  const key = req.body.key
+  const token = req.body.token
+
+  if(!( key && token )) return res.sendStatus(404)
+
+  redis.get('api:' + key)
+    .then(token =>
+      res.sendStatus(
+        (token==req.body.token) ? 200 : 401
+      )
+    )
+})
+
 app.put('/api/content', parser, bodyParser.json(), (req, res) => {
 
   // res.send("erm")
