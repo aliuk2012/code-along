@@ -168,7 +168,7 @@ app.get('/api/details', (req, res) => {
 
 })
 
-app.get('/api/check', parser, bodyParser.json(), (req, res) => {
+app.post('/api/check', parser, bodyParser.json(), (req, res) => {
   const key = req.body.key
   const token = req.body.token
 
