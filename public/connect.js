@@ -256,6 +256,7 @@ var populate = fetch(url)
   .then(function(res){ return res.text()})
   .then(function(text){
     files.deserialise(text)
+    load()
     // code.setValue(text)
   })
 
