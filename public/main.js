@@ -51,7 +51,7 @@ var template = fetch('template.txt')
                  })
 
 function load(){
-  convert(code.getValue())
+  convert(window.files)
     .then(function(code){
       template
         .then(function(template) {

@@ -1,5 +1,12 @@
+function doc(text){
+  return new CodeMirror.Doc(text, 'javascript')
+}
+
 function FileSet(){
-  this.store = [{name: 'main.js', body: ''}]
+  this.store = [{
+    name: 'main.js',
+    body: doc(''),
+  }]
   this.current = 0
   this.listeners = []
 }
@@ -16,7 +23,7 @@ FileSet.prototype.notify = function(){
 FileSet.prototype.add = function (name) {
   this.current = this.store.push({
     name: name,
-    body: '// ' + name
+    body: doc('// ' + name)
   }) - 1
   this.notify()
 }
@@ -33,11 +40,55 @@ FileSet.prototype.rm = function (idx) {
   this.notify()
 }
 
+FileSet.prototype.deserialise = function(text) {
+  var re = /\S+/
+  this.store =
+  text.split('//____')
+  .map(function(part, i) {
+
+    if(i==0)
+      return {
+        name: 'main.js',
+        body: doc(part)
+      }
+
+    var idx = part.indexOf('\n')
+    var name = part.substr(0, idx)
+    var body = part.substr(idx+1)
+
+    return {
+      name: name,
+      body: doc(body)
+    }
+
+  })
+
+  if(this.current > this.store.length-1) {
+    this.current = this.store.length-1
+  }
+
+  this.notify()
+}
+
+
+FileSet.prototype.serialise = function(text) {
+  return this.store.map(function(item, i){
+    if(i)
+      return '//____'+item.name+'\n'+
+             item.body.getValue()
+    else
+      return item.body.getValue()
+
+  }).join('')
+}
+
+
 var files = new FileSet
 
-// files.add('one.js')
-// files.add('two.js')
-// files.add('three.js')
+files.listen( function(d) {
+  code.swapDoc(d[files.current].body)
+})
+
 
 
 var target_iframe = document.querySelector('iframe')
@@ -204,7 +255,8 @@ console.log(url)
 var populate = fetch(url)
   .then(function(res){ return res.text()})
   .then(function(text){
-    code.setValue(text)
+    files.deserialise(text)
+    // code.setValue(text)
   })
 
 var pusherClient = fetch('/pusher/config')
@@ -279,7 +331,11 @@ if(!publishing) {
         code.setOption('readOnly', action.readOnly ? 'nocursor' : false)
 
         if(typeof(action.body) !== 'undefined') {
-          code.setValue(action.body)
+          // TODO - THIS COULD GET CALLED ALOT
+          // MAKING LOTS OF NEW DOCUMENTS
+          files.deserialise(action.body)
+          load()
+          // code.setValue(action.body)
         }
 
       })
@@ -345,9 +401,14 @@ if(user_connection.type == 'independent') {
           fetch('/content/' + id)
             .then(function(res){ return res.text()})
             .then(function(text){
-              code.setValue(text)
+
+              console.log(text)
+
+              files.deserialise(text)
+              // code.setValue(text)
 
               code.on('change', debounce(function(){
+                // return console.log("ignoring change")
 
                 console.log("putting " + id)
 
@@ -359,7 +420,7 @@ if(user_connection.type == 'independent') {
                     'Content-Type': 'application/json'
                   },
                   body: JSON.stringify({
-                    value: code.getValue()
+                    value: files.serialise()
                   })
                 })
 

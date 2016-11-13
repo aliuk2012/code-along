@@ -15,10 +15,32 @@ var modules = [
 
 var scriptRegex = /^\s*\/\/\+(https:\/\/\S*)$/gm
 
-function convert (source) {
+function convert (files) {
+  var main, local_modules, scripts = ''
+
+  // horribly hacky, pull out any external scripts
+  // before rollup removes comments
+  function extract_scripts(code){
+    while(match = scriptRegex.exec(code))
+      scripts += '<script src="'+match[1]+'"></script>\n'
+    return code
+  }
+
+  if(files) {
+    main = extract_scripts(files.store[0].body.getValue())
+    local_modules = files.store.reduce(function(memo, f){
+      memo[f.name] = extract_scripts(f.body.getValue())
+      return memo
+    }, {})
+  } else {
+    main = ''
+    local_modules = {}
+  }
+
+
 
   // IMPORTANT, loop protect must be loaded frontend too
-  source = loopProtect(source + '\n')
+  // source = loopProtect(source + '\n')
 
   return rollup.rollup({
     entry: '__main__',
@@ -28,13 +50,18 @@ function convert (source) {
           return importer
         },
         load: function(id) {
-          if(id == '__main__') return source
-          return modules[id] || Promise.reject("not provided")
+          if(id == '__main__') return main
+          return local_modules[id] || modules[id] || Promise.reject("not provided")
         }
       },
       {
         transformBundle: function(d){
           return buble.transform(d).code
+        }
+      },
+      {
+        transformBundle: function(d){
+          return loopProtect(d) + '\n'
         }
       }
     ]
@@ -45,15 +72,10 @@ function convert (source) {
       format: 'iife'
     }).code
 
-    // look for any external includes
-    var includes = '', match
-
-    while(match = scriptRegex.exec(code))
-      includes += '<script src="'+match[1]+'"></script>\n'
-
-    return includes + '<script id="injected">' +
-      code +
-      '</script>'
+    return scripts +
+          '<script id="injected">' +
+            code +
+          '</script>'
 
   })
 }
