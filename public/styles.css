@@ -131,7 +131,8 @@ button span {
   display: block;
   padding: .5em;
   text-decoration: none;
-  color: #000
+  color: #000;
+  background: rgba(255,255,255,0.9)
 }
 #file-state:hover {
   color: #08f
