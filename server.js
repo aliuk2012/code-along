@@ -5,6 +5,7 @@ const Redis = require('ioredis')
 const bodyParser = require('body-parser')
 const express = require('express')
 const session = require('express-session')
+const cors = require('cors')
 
 const app = express()
 const redis = new Redis(process.env.REDIS_URL)
@@ -152,7 +153,9 @@ app.get('/content/:key', (req, res) => {
 
 const crypto = require('crypto')
 
-app.get('/api/details', (req, res) => {
+app.options('/api/*', cors())
+
+app.get('/api/details', cors(), (req, res) => {
   const key = req.session.pusher_user_id
 
   if(!key)
@@ -168,7 +171,7 @@ app.get('/api/details', (req, res) => {
 
 })
 
-app.post('/api/check', parser, bodyParser.json(), (req, res) => {
+app.post('/api/check', cors(), parser, bodyParser.json(), (req, res) => {
   const key = req.body.key
   const token = req.body.token
 
@@ -182,7 +185,7 @@ app.post('/api/check', parser, bodyParser.json(), (req, res) => {
     )
 })
 
-app.put('/api/content', parser, bodyParser.json(), (req, res) => {
+app.put('/api/content', cors(), parser, bodyParser.json(), (req, res) => {
 
   // res.send("erm")
 
