@@ -82,3 +82,16 @@ function debounce(fn, millis, timer){
     timer = setTimeout(fn,millis,arguments)
   }
 }
+
+
+//hook up orientation events
+window.addEventListener('deviceorientation', (e) => {
+  iframe.contentWindow.postMessage({
+    eventName:'deviceorientation',
+    value: {
+      alpha: e.alpha,
+      beta: e.beta,
+      gamma: e.gamma
+    }
+  }, '*')
+}, false)
