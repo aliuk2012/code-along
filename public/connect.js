@@ -407,6 +407,7 @@ if(user_connection.type == 'independent') {
 
               files.deserialise(text)
               // code.setValue(text)
+              load()
 
               code.on('change', debounce(function(){
                 // return console.log("ignoring change")
