@@ -92,7 +92,7 @@ button span {
   background-image: none;
 }
 #connection-state.default:after {
-  content:' ←';
+  content:' ·';
 }
 
 #connection-state.independent {
