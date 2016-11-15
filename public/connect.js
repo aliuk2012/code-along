@@ -108,7 +108,7 @@ var user_connection = (function(){
     }
   }
 
-  var match = href.match(/\?connect=(.+)/)
+  var match = href.match(/\?(\d+)$/)
   if(match) {
     return {
       type: 'connect',
@@ -161,7 +161,7 @@ var showDialog = (function setup(){
     })
     modal.addEventListener('submit', function(e){
       e.preventDefault()
-      document.location = '/?connect=' + other_editor.value
+      document.location = '/?' + other_editor.value
     })
 
 
